@@ -6,7 +6,7 @@ const HowItWork = () => {
     return (
         <div className='my-8'>
             <p className='text-2xl text-secondary font-bold pb-5'>How It Works</p>
-           <div className="grid grid-cols-4 gap-4 ">
+           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
 
       {/* Card 1 */}
       <div className="p-5 bg-white shadow rounded-xl hover:shadow-lg hover:-translate-y-1 

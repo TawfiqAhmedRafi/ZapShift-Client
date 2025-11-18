@@ -1,9 +1,9 @@
 import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
-import b1 from "../../assets/banner/banner1.png";
-import b2 from "../../assets/banner/banner2.png";
-import b3 from "../../assets/banner/banner3.png";
+import b1 from "../../../assets/banner/banner1.png";
+import b2 from "../../../assets/banner/banner2.png";
+import b3 from "../../../assets/banner/banner3.png";
 import { FaArrowCircleUp } from "react-icons/fa";
 const Banner = () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import service from "../../assets/service.png"
+import service from "../../../assets/service.png"
 const Services = () => {
     return (
       <div className="bg-secondary px-6 py-16 rounded-3xl">
@@ -59,6 +59,7 @@ const Services = () => {
     </h3>
     <p className="text-sm text-gray-600 mt-2">
       Customized warehouse + inventory management for businesses.
+      
     </p>
   </div>
 
