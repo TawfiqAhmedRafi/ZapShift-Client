@@ -3,14 +3,21 @@ import Logo from "../../../Components/Logo/Logo";
 import { NavLink } from "react-router";
 
 const Navbar = () => {
+  const getLinkClass = ({ isActive }) =>
+    `px-3 py-2 rounded-3xl font-medium ${
+      isActive ? "bg-primary text-white" : "text-gray-800 hover:bg-gray-200"
+    }`;
   const links = (
     <>
-      <li>
-        <NavLink to="">Services</NavLink>
+      <li className="mr-2">
+        <NavLink to="" className={getLinkClass}>Services</NavLink>
       </li>
 
-      <li>
-        <NavLink  to="">Services</NavLink>
+      <li className="mr-2">
+        <NavLink  to="" className={getLinkClass}>About Us</NavLink>
+      </li>
+      <li className="mr-2">
+        <NavLink className={getLinkClass} to="/coverage">Coverage</NavLink>
       </li>
     </>
   );

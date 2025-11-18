@@ -5,7 +5,7 @@ import Footer from "../Pages/Shared/Footer/Footer";
 
 const RooyLayout = () => {
   return (
-    <div className="max-w-7xl mx-auto ">
+    <div className="max-w-7xl mx-auto bg-base-300 ">
       <header>
         <Navbar />
       </header>
