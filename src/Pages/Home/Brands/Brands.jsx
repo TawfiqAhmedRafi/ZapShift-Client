@@ -21,7 +21,7 @@ const brandlogos = [
 const Brands = () => {
   return (
    <div className="mt-20 mb-10">
-    <p className="text-center text-2xl text-secondary font-bold mb-10">We've helped thousands of sales teams</p>
+    <p className="text-center text-xl md:text-2xl text-secondary font-bold mb-10">We've helped thousands of sales teams</p>
      <Swiper
       slidesPerView={4}
       centeredSlides={true}
