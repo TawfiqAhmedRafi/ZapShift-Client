@@ -160,7 +160,7 @@
     "region": "Chattogram",
     "district": "Cumilla",
     "city": "Cumilla",
-    "covered_area": ["Laksam", "Debidwar", "Chandina", "Muradnagar"],
+    "covered_area": ["Laksam", "Debidwar", "Chandina", "Muradnagar","Sadar"],
     "status": "active",
     "flowchart": "https://example.com/cumilla-flowchart.png",
     "longitude": 91.1809,
