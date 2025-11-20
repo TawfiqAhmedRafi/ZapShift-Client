@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
   const { resetEmail } = useAuth();
-  const [email, setEmail] = useState("");
+  const location = useLocation();
+  const [email, setEmail] = useState(location.state?.email || "");
   const {loading, setLoading}= useAuth();
   const navigate = useNavigate();
 

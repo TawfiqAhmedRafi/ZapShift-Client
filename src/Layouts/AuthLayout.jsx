@@ -12,7 +12,7 @@ const AuthLayout = () => {
         
         <div className="flex-1 relative">
          
-          <div className="absolute top-6 left-6">
+          <div className="absolute top-4 left-6">
             <Logo />
           </div>
 

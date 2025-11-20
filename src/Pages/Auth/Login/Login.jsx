@@ -11,7 +11,8 @@ const Login = () => {
   const { SignInUser } = useAuth();
   const location = useLocation();
   
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit , watch } = useForm();
+  const watchEmail = watch("email", ""); 
   const handleLogin = (data) => {
     SignInUser(data.email, data.password)
       .then((result) =>  {
@@ -60,7 +61,7 @@ const Login = () => {
           </div>
 
           <div>
-            <Link to="/forgot-password" className="link link-hover hover:font-bold text-secondary">Forgot password?</Link>
+            <Link state={{ email: watchEmail }} to="/forgot-password" className="link link-hover hover:font-bold text-secondary">Forgot password?</Link>
           </div>
           <button className="btn btn-primary mt-4">Login</button>
           <p>
