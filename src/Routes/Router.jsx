@@ -4,6 +4,9 @@ import Home from "../Pages/Home/Home/Home";
 import Coverage from "../Pages/Coverage/Coverage";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import AboutUs from "../Pages/AboutUs/AboutUs";
+import AuthLayout from "../Layouts/AuthLayout";
+import Login from "../Pages/Auth/Login/Login";
+import Register from "../Pages/Auth/Register/Register";
 
 export const router = createBrowserRouter([
   {
@@ -12,21 +15,35 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: Home , 
+        Component: Home,
       },
       {
-        path : "coverage",
-        Component : Coverage,
-        loader : ()=> fetch('/serviceCenter.json').then((res)=>res.json())
+        path: "coverage",
+        Component: Coverage,
+        loader: () => fetch("/serviceCenter.json").then((res) => res.json()),
       },
       {
-        path : "aboutUs",
-        Component : AboutUs
-      }
+        path: "aboutUs",
+        Component: AboutUs,
+      },
     ],
   },
   {
-    path : "*",
-    Component : ErrorPage
-  }
+    path: "/",
+    Component: AuthLayout,
+    children: [
+      {
+        path: "login",
+        Component : Login
+      },
+      {
+        path: "register",
+        Component : Register
+      },
+    ],
+  },
+  {
+    path: "*",
+    Component: ErrorPage,
+  },
 ]);
