@@ -1,23 +1,40 @@
 import React from "react";
 import Logo from "../../../Components/Logo/Logo";
 import { Link, NavLink } from "react-router";
+import useAuth from "../../../hooks/useAuth";
+
 
 const Navbar = () => {
   const getLinkClass = ({ isActive }) =>
     `px-3 py-2 rounded-3xl font-medium ${
       isActive ? "bg-primary text-white" : "text-gray-800 hover:bg-gray-200"
     }`;
+  const { user, logOut, loading } = useAuth();
+
+  const handleLogOut = () => {
+    logOut()
+      .then()
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const links = (
     <>
       <li className="mr-2">
-        <NavLink to="" className={getLinkClass}>Services</NavLink>
+        <NavLink to="" className={getLinkClass}>
+          Services
+        </NavLink>
       </li>
 
       <li className="mr-2">
-        <NavLink  to="/aboutUs" className={getLinkClass}>About Us</NavLink>
+        <NavLink to="/aboutUs" className={getLinkClass}>
+          About Us
+        </NavLink>
       </li>
       <li className="mr-2">
-        <NavLink className={getLinkClass} to="/coverage">Coverage</NavLink>
+        <NavLink className={getLinkClass} to="/coverage">
+          Coverage
+        </NavLink>
       </li>
     </>
   );
@@ -57,7 +74,103 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        <div className="hidden md:flex gap-5 ">
+          {loading ? (
+            <span className="loading loading-bars text-primary loading-xl"></span>
+          ) : user ? (
+            <>
+              <div
+                className="tooltip tooltip-bottom tooltip-secondary font-semibold "
+                data-tip={user.displayName}
+              >
+                <img
+                  src={user.photoURL}
+                  alt="User"
+                  className="w-10 h-10 rounded-full cursor-pointer"
+                />
+              </div>
+              <button onClick={handleLogOut} className="btn ">
+                Log Out
+              </button>
+            </>
+          ) : (
+            <div className="flex gap-2">
+              <Link to="/login" className="btn">
+                Login
+              </Link>
+              <Link to="/register" className="btn ">
+                Register
+              </Link>
+            </div>
+          )}
+          <Link to="/beArider" className="btn mx-1 btn-primary text-black">
+            Be a Rider
+          </Link>
+        </div>
+        {/* Mobile Dropdown */}
+
+        <div className="dropdown md:hidden fredoka-font">
+          <label tabIndex={0} className="btn btn-primary outline-0 shadow-none">
+            Menu
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu p-0 shadow bg-base-100 rounded-box mt-2 min-w-max -ml-8"
+          >
+            {loading ? (
+              <span className="loading loading-bars text-primary loading-xl"></span>
+            ) : user ? (
+              <>
+                {" "}
+                <div className="flex flex-col justify-center items-center gap-3">
+                  <div
+                    className="tooltip tooltip-left tooltip-secondary font-semibold fredoka-font "
+                    data-tip={user.displayName}
+                  >
+                    <img
+                      src={user.photoURL}
+                      alt="User"
+                      className="  w-10 h-10 rounded-full cursor-pointer "
+                    />
+                  </div>
+                  <button
+                    onClick={handleLogOut}
+                    className="btn m-0.5 outline-0 shadow-none"
+                  >
+                    Logout
+                  </button>
+                  <Link
+                    to="/register"
+                    className="btn mx-1 btn-primary text-black mb-2"
+                  >
+                    Be a Rider
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  to="/login"
+                  className="btn  outline-0 shadow-none"
+                >
+                  Login
+                </NavLink>
+                <NavLink
+                  to="/register"
+                  className="btn  outline-0 shadow-none"
+                >
+                  Register
+                </NavLink>
+                <Link
+                  to="/beArider"
+                  className="btn mx-1 btn-primary text-black mb-2"
+                >
+                  Be a Rider
+                </Link>
+              </>
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );

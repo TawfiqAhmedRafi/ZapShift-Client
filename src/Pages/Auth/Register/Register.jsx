@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
-import { toast } from "react-toastify";
-import { FcGoogle } from "react-icons/fc";
+import SocialLogin from "../SocialLogin/SocialLogin";
+import axios from "axios";
 
 const Register = () => {
   const {
@@ -13,38 +13,77 @@ const Register = () => {
     formState: { errors },
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  const { registerUser, googleSignIn } = useAuth();
+  const { registerUser , updateUserProfile } = useAuth();
   const navigate = useNavigate();
   const handleRegistration = (data) => {
+    
+    const profileImg = data.photo[0] 
     registerUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
-        navigate('/')
+        // store the image and get photoURL
+        const formData= new FormData();
+        formData.append('image',profileImg)
+        const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`
+
+        axios.post(image_API_URL, formData)
+        .then(res =>{
+          
+             // update user profile
+             const userProfile = {
+                displayName  : data.name  ,
+                photoURL : res.data.data.url
+             }
+             updateUserProfile(userProfile)
+             .then(()=>{
+             
+                navigate("/");
+             }
+
+             )
+             .catch(error=>{
+                console.log(error)
+             })
+        })
+       
+
+        
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  const handleGoogle = () => {
-    return googleSignIn()
-      .then(async () => {
-       
-
-        toast.success("Google sign-up successful!");
-        navigate("/");
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        toast(errorMessage);
-      });
-  };
+  
   return (
     <div>
-      <h2 className="text-3xl font-bold text-secondary">
-        Register Your Account
-      </h2>
+     <h2  className="text-4xl font-bold text-secondary">Create an Account</h2>
+      <p className="text-sm">Register with ZapShift</p>
       <form onSubmit={handleSubmit(handleRegistration)}>
         <fieldset className="fieldset">
+            {/* Name */}
+          <label className="label">Name</label>
+          <input
+            type="text"
+            {...register("name", { required: true })}
+            className="input"
+            placeholder="Your name"
+          />
+          {errors.email?.type === "required" && (
+            <p className="text-red-500">Name is Required</p>
+          )}
+            {/* photo */}
+          <label className="label">Photo</label>
+          
+          <input
+            type="file"
+            {...register("photo", { required: true })}
+            className="file-input "
+            placeholder="Your Photo"
+          />
+          {errors.email?.type === "required" && (
+            <p className="text-red-500">Photo is Required</p>
+          )}
+            {/* email */}
           <label className="label">Email</label>
           <input
             type="email"
@@ -55,6 +94,7 @@ const Register = () => {
           {errors.email?.type === "required" && (
             <p className="text-red-500">Email is Required</p>
           )}
+          {/* password */}
           <label className="label">Password</label>
           <div className="relative">
             <input
@@ -96,15 +136,9 @@ const Register = () => {
             Login
           </Link>{" "}
         </p>
+        <SocialLogin></SocialLogin>
       </form>
-      <p className="text-center my-1 text-gray-500">Or</p>
-      <button
-        type="button"
-        onClick={handleGoogle}
-        className="btn btn-primary btn-outline w-full "
-      >
-        <FcGoogle size={24} /> Sign Up with Google
-      </button>
+      
     </div>
   );
 };

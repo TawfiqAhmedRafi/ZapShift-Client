@@ -26,7 +26,7 @@ const ReviewCard = ({ review }) => {
         <img src={user_photoURL} className="w-12 h-12 rounded-full" alt="" />
         <div>
             <p className="text-xl text-secondary font-semibold">{userName}</p>
-            <p className="flex items-center gap-1">{ratings}<StarRating ratings={ratings}></StarRating></p>
+            <div className="flex items-center gap-1">{ratings}<StarRating ratings={ratings}></StarRating></div>
 
         </div>
        </div>

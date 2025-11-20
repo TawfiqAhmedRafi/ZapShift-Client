@@ -3,17 +3,16 @@ import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
-import { toast } from "react-toastify";
-import { FcGoogle } from "react-icons/fc";
+import SocialLogin from "../SocialLogin/SocialLogin";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { googleSignIn ,SignInUser } = useAuth();
+  const { SignInUser } = useAuth();
   const { register, handleSubmit } = useForm();
   const handleLogin = (data) => {
     SignInUser(data.email, data.password)
-      .then((result) => {
+      .then((result) =>  {
         console.log(result.user);
         navigate('/')
       })
@@ -21,20 +20,11 @@ const Login = () => {
         console.log(error);
       });
   };
-  const handleGoogle = () => {
-    return googleSignIn()
-      .then(async () => {
-        toast.success("Google sign-up successful!");
-        navigate("/");
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        toast(errorMessage);
-      });
-  };
+ 
   return (
     <div className=" ">
-      <h2 className="text-3xl font-bold text-secondary">Login Your Account</h2>
+        <h2  className="text-4xl font-bold text-secondary">Welcome Back</h2>
+      <p className="text-sm">Login with ZapShift</p>
       <form onSubmit={handleSubmit(handleLogin)}>
         <fieldset className="fieldset">
           {/* Email */}
@@ -72,21 +62,14 @@ const Login = () => {
           </div>
           <button className="btn btn-primary mt-4">Login</button>
           <p>
-            Don't Have an account?
+            New to ZapShift?
             <Link to="/register" className="text-primary hover:underline">
               Register
             </Link>{" "}
           </p>
         </fieldset>
       </form>
-      <p className="text-center my-1  text-gray-500">Or</p>
-      <button
-        type="button"
-        onClick={handleGoogle}
-        className="btn btn-primary btn-outline w-full "
-      >
-        <FcGoogle size={24} /> Sign Up with Google
-      </button>
+      <SocialLogin></SocialLogin>
     </div>
   );
 };
