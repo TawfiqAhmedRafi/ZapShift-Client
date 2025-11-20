@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "../../../Components/Logo/Logo";
 import { Link, NavLink } from "react-router";
 import useAuth from "../../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 
 const Navbar = () => {
@@ -13,7 +14,9 @@ const Navbar = () => {
 
   const handleLogOut = () => {
     logOut()
-      .then()
+      .then(()=>{
+        toast("logged out succesfully")
+      })
       .catch((error) => {
         console.log(error);
       });

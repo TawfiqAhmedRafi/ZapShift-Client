@@ -9,6 +9,9 @@ import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
 import PrivateRoute from "./PrivateRoute";
 import Rider from "../Pages/Rider/Rider";
+import ResetPassword from "../Pages/Auth/ResetPassword/ResetPassword";
+import VerifyOtp from "../Pages/Auth/VerifyOtp/VerifyOtp";
+import ForgotPassword from "../Pages/Auth/ForgotPassword/ForgotPassword";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +52,18 @@ export const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+      },
+      {
+        path: "forgot-password",
+        Component: ForgotPassword,
+      },
+      {
+        path: "verify-otp",
+        Component: VerifyOtp,
+      },
+      {
+        path: "reset-password",
+        Component: ResetPassword,
       },
     ],
   },

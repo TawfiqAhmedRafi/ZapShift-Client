@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 
@@ -60,7 +60,7 @@ const Login = () => {
           </div>
 
           <div>
-            <a className="link link-hover">Forgot password?</a>
+            <Link to="/forgot-password" className="link link-hover hover:font-bold text-secondary">Forgot password?</Link>
           </div>
           <button className="btn btn-primary mt-4">Login</button>
           <p>

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import {
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   updateProfile,
+  verifyPasswordResetCode,
 } from "firebase/auth";
 import { auth } from "../../Firebase/firebase.config";
 const googleProvider = new GoogleAuthProvider();
@@ -37,10 +40,26 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-//   update Profile
-const updateUserProfile=(profile)=>{
-    return updateProfile(auth.currentUser , profile)
-}
+  //   update Profile
+  const updateUserProfile = (profile) => {
+    return updateProfile(auth.currentUser, profile);
+  };
+  // password reset
+  const resetEmail = async (email) => {
+    return await sendPasswordResetEmail(auth, email, {
+      url: "http://localhost:5173/reset-password",
+      handleCodeInApp: true,
+    });
+  };
+  // verifyCode
+
+  const verifyCode = async (oobCode) => {
+    return await verifyPasswordResetCode(auth, oobCode);
+  };
+  //   new pass
+  const saveNewPassword = async (oobCode, newPassword) => {
+    return await confirmPasswordReset(auth, oobCode, newPassword);
+  };
 
   //   observe State
   useEffect(() => {
@@ -60,7 +79,11 @@ const updateUserProfile=(profile)=>{
     user,
     loading,
     logOut,
-    updateUserProfile
+    updateUserProfile,
+    resetEmail,
+    verifyCode,
+    saveNewPassword,
+    setLoading
   };
   return <AuthContext value={authInfo}>{children}</AuthContext>;
 };

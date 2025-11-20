@@ -11,7 +11,7 @@ const SocialLogin = () => {
   const handleGoogle = () => {
     return googleSignIn()
       .then(async () => {
-        toast.success("Google sign-up successful!");
+        toast.success("Google sign-in successful!");
         navigate(location?.state || "/");
       })
       .catch((error) => {
