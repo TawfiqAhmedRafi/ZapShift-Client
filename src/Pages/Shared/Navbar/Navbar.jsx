@@ -35,6 +35,11 @@ const Navbar = () => {
         </NavLink>
       </li>
       <li className="mr-2">
+        <NavLink className={getLinkClass} to="/send-parcel">
+          Send Parcel
+        </NavLink>
+      </li>
+      <li className="mr-2">
         <NavLink className={getLinkClass} to="/coverage">
           Coverage
         </NavLink>

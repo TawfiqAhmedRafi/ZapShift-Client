@@ -12,6 +12,7 @@ import Rider from "../Pages/Rider/Rider";
 import ResetPassword from "../Pages/Auth/ResetPassword/ResetPassword";
 import VerifyOtp from "../Pages/Auth/VerifyOtp/VerifyOtp";
 import ForgotPassword from "../Pages/Auth/ForgotPassword/ForgotPassword";
+import SendParcel from "../Pages/SendParcel/SendParcel";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,16 @@ export const router = createBrowserRouter([
             <Rider></Rider>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "send-parcel",
+        element: (
+          <PrivateRoute>
+            <SendParcel></SendParcel>
+          </PrivateRoute>
+
+        ),
+        loader: () => fetch("/serviceCenter.json").then((res) => res.json()),
       },
       {
         path: "aboutUs",
