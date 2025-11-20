@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import axios from "axios";
 
@@ -15,6 +15,9 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { registerUser , updateUserProfile } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation()
+
+
   const handleRegistration = (data) => {
     
     const profileImg = data.photo[0] 
@@ -37,7 +40,7 @@ const Register = () => {
              updateUserProfile(userProfile)
              .then(()=>{
              
-                navigate("/");
+                navigate(location.state || '/');
              }
 
              )
@@ -132,7 +135,9 @@ const Register = () => {
         </fieldset>
         <p>
           Already have an account?
-          <Link to="/login" className="text-primary hover:underline">
+          <Link
+          state={location.state}
+          to="/login" className="text-primary hover:underline">
             Login
           </Link>{" "}
         </p>

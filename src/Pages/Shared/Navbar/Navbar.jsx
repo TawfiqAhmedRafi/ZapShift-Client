@@ -103,7 +103,7 @@ const Navbar = () => {
               </Link>
             </div>
           )}
-          <Link to="/beArider" className="btn mx-1 btn-primary text-black">
+          <Link to="/rider" className="btn mx-1 btn-primary text-black">
             Be a Rider
           </Link>
         </div>
@@ -140,7 +140,7 @@ const Navbar = () => {
                     Logout
                   </button>
                   <Link
-                    to="/register"
+                    to="/rider"
                     className="btn mx-1 btn-primary text-black mb-2"
                   >
                     Be a Rider
@@ -162,7 +162,7 @@ const Navbar = () => {
                   Register
                 </NavLink>
                 <Link
-                  to="/beArider"
+                  to="/rider"
                   className="btn mx-1 btn-primary text-black mb-2"
                 >
                   Be a Rider

@@ -7,6 +7,8 @@ import AboutUs from "../Pages/AboutUs/AboutUs";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
+import PrivateRoute from "./PrivateRoute";
+import Rider from "../Pages/Rider/Rider";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +25,14 @@ export const router = createBrowserRouter([
         loader: () => fetch("/serviceCenter.json").then((res) => res.json()),
       },
       {
+        path: "rider",
+        element: (
+          <PrivateRoute>
+            <Rider></Rider>
+          </PrivateRoute>
+        ),
+      },
+      {
         path: "aboutUs",
         Component: AboutUs,
       },
@@ -34,14 +44,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "login",
-        Component : Login
+        Component: Login,
       },
       {
         path: "register",
-        Component : Register
+        Component: Register,
       },
     ],
   },
+
   {
     path: "*",
     Component: ErrorPage,

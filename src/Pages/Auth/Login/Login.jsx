@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 
@@ -9,12 +9,14 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { SignInUser } = useAuth();
+  const location = useLocation();
+  
   const { register, handleSubmit } = useForm();
   const handleLogin = (data) => {
     SignInUser(data.email, data.password)
       .then((result) =>  {
         console.log(result.user);
-        navigate('/')
+        navigate(location?.state || "/")
       })
       .catch((error) => {
         console.log(error);
@@ -63,7 +65,7 @@ const Login = () => {
           <button className="btn btn-primary mt-4">Login</button>
           <p>
             New to ZapShift?
-            <Link to="/register" className="text-primary hover:underline">
+            <Link state={location.state} to="/register" className="text-primary hover:underline">
               Register
             </Link>{" "}
           </p>
