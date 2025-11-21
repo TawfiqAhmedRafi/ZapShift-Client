@@ -37,6 +37,7 @@ const SendParcel = () => {
         cost = minCharge + extraCharge;
       }
     }
+    data.cost = cost;
     console.log("cost", cost);
     Swal.fire({
       title: "Agree with the cost? ",
@@ -52,11 +53,11 @@ const SendParcel = () => {
         axiosSecure.post("/parcels", data).then((res) => {
           console.log("after saving parcel ", res.data);
         });
-        // Swal.fire({
-        //   title: "Deleted!",
-        //   text: "Your file has been deleted.",
-        //   icon: "success",
-        // });
+        Swal.fire({
+          title: "Parcel Sent!",
+          text: "Your parcel has been successfully created.",
+          icon: "success",
+        });
       }
     });
 
