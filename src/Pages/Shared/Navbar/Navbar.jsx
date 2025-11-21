@@ -44,6 +44,13 @@ const Navbar = () => {
           Coverage
         </NavLink>
       </li>
+      {
+        user &&  <li className="mr-2">
+        <NavLink className={getLinkClass} to="/dashboard/my-parcels">
+          My Parcels
+        </NavLink>
+      </li>
+      }
     </>
   );
   return (

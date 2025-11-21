@@ -13,6 +13,8 @@ import ResetPassword from "../Pages/Auth/ResetPassword/ResetPassword";
 import VerifyOtp from "../Pages/Auth/VerifyOtp/VerifyOtp";
 import ForgotPassword from "../Pages/Auth/ForgotPassword/ForgotPassword";
 import SendParcel from "../Pages/SendParcel/SendParcel";
+import DashBoardLayout from "../Layouts/DashBoardLayout";
+import MyParcels from "../Pages/DashBoard/MyParcels/MyParcels";
 
 export const router = createBrowserRouter([
   {
@@ -42,7 +44,6 @@ export const router = createBrowserRouter([
           <PrivateRoute>
             <SendParcel></SendParcel>
           </PrivateRoute>
-
         ),
         loader: () => fetch("/serviceCenter.json").then((res) => res.json()),
       },
@@ -77,6 +78,20 @@ export const router = createBrowserRouter([
         Component: ResetPassword,
       },
     ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashBoardLayout></DashBoardLayout>
+      </PrivateRoute>
+    ),
+    children : [
+      {
+        path : 'my-parcels',
+        Component : MyParcels
+      }
+    ]
   },
 
   {
