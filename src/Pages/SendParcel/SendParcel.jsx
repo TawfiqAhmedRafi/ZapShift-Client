@@ -2,24 +2,70 @@ import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const SendParcel = () => {
   const serviceCenters = useLoaderData();
 
   const { user } = useAuth();
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    control ,
+    // formState: { errors },
+    control,
   } = useForm();
+
+  const axiosSecure = useAxiosSecure();
   const handleSendParcel = (data) => {
-    console.log(data);
+    const isDocument = data.parcelType === "document";
+    const isSameDistrict = data.senderDistrict === data.receiverDistrict;
+    const parcelWeight = parseFloat(data.parcelWeight);
+    let cost = 0;
+    if (isDocument) {
+      cost = isSameDistrict ? 60 : 80;
+    } else {
+      if (parcelWeight <= 3) {
+        cost = isSameDistrict ? 110 : 150;
+      } else {
+        const minCharge = isSameDistrict ? 110 : 150;
+        const extraWeight = parcelWeight - 3;
+        const extraCharge = isSameDistrict
+          ? extraWeight * 40
+          : extraWeight * 40 + 40;
+        cost = minCharge + extraCharge;
+      }
+    }
+    console.log("cost", cost);
+    Swal.fire({
+      title: "Agree with the cost? ",
+      text: `You will be charged ${cost} taka !!`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: " I agree!!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //  save parcel to database
+        axiosSecure.post("/parcels", data).then((res) => {
+          console.log("after saving parcel ", res.data);
+        });
+        // Swal.fire({
+        //   title: "Deleted!",
+        //   text: "Your file has been deleted.",
+        //   icon: "success",
+        // });
+      }
+    });
+
+    console.log(isSameDistrict, data);
   };
   const regionsDuplicate = serviceCenters.map((c) => c.region);
   const regions = [...new Set(regionsDuplicate)];
-  const senderRegion = useWatch({control,name :'senderRegion'});
-  const receiverRegion = useWatch ({control,name : 'receiverRegion'})
+  const senderRegion = useWatch({ control, name: "senderRegion" });
+  const receiverRegion = useWatch({ control, name: "receiverRegion" });
 
   const districtByRegion = (region) => {
     const regionDistrict = serviceCenters.filter((c) => c.region === region);
@@ -76,7 +122,12 @@ const SendParcel = () => {
             <label className="label">Parcel Weight(kg)</label>
             <input
               type="number"
-              {...register("parcelWeight")}
+              step="0.01"
+              {...register("parcelWeight", {
+                required: true,
+                valueAsNumber: true,
+                min: 0.1,
+              })}
               className="input w-full"
               placeholder="Parcel Weight"
             />
@@ -96,6 +147,7 @@ const SendParcel = () => {
                 type="text"
                 {...register("senderName")}
                 className="input w-full"
+                defaultValue={user?.displayName}
                 placeholder="Sender Name"
               />
               {/* Sender email */}
@@ -104,7 +156,8 @@ const SendParcel = () => {
                 type="email"
                 {...register("senderEmail")}
                 className="input w-full"
-                value={user.email}
+                defaultValue={user?.email}
+                placeholder="Email"
               />
               {/* Sender phone */}
               <label className="label mt-4">Sender Phone Number</label>
@@ -184,7 +237,7 @@ const SendParcel = () => {
                 className="input w-full"
                 placeholder="Receiver Email"
               />
-              
+
               {/* receiver phone */}
               <label className="label mt-4">Receiver Phone Number</label>
               <input
@@ -194,7 +247,7 @@ const SendParcel = () => {
                 placeholder="Receiver Phone Number"
               />
 
- {/* Receiver region */}
+              {/* Receiver region */}
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Receiver Regions</legend>
                 <select
@@ -226,7 +279,6 @@ const SendParcel = () => {
                   ))}
                 </select>
               </fieldset>
-
 
               {/* receiver address */}
               <label className="label mt-4">Receiver Address</label>
