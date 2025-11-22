@@ -47,7 +47,7 @@ const MyParcels = () => {
   return (
     <div>
       <h2 className="text-4xl font-bold text-secondary">
-        All my Parcel: {parcels.length}
+        All my Parcels
       </h2>
       <div className="overflow-x-auto">
         <table className="table table-zebra">
@@ -79,15 +79,15 @@ const MyParcels = () => {
                   </td>
                   <td>{parcel.deliveryStatus}</td>
                   <td className="flex flex-col md:flex-row gap-4 md:gap-0">
-                    <button className="btn btn-square hover:btn-primary">
+                    <button className="btn btn-square btn-primary">
                       <FaMagnifyingGlass></FaMagnifyingGlass>
                     </button>
-                    <button className="btn btn-square hover:btn-primary md:mx-2">
+                    <button className="btn btn-square bg-[#94C6CB] md:mx-2">
                       <FiEdit></FiEdit>
                     </button>
                     <button
                       onClick={() => handleParcelDelete(parcel._id)}
-                      className="btn btn-square hover:bg-red-400"
+                      className="btn btn-square bg-red-400"
                     >
                       <FaTrashCan></FaTrashCan>
                     </button>
