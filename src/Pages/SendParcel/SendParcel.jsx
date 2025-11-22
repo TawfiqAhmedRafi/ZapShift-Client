@@ -38,7 +38,7 @@ const navigate = useNavigate();
       }
     }
     data.cost = cost;
-    console.log("cost", cost);
+   
     Swal.fire({
       title: "Agree with the cost? ",
       text: `You will be charged ${cost} taka !!`,
@@ -51,7 +51,7 @@ const navigate = useNavigate();
       if (result.isConfirmed) {
         //  save parcel to database
         axiosSecure.post("/parcels", data).then((res) => {
-          console.log("after saving parcel ", res.data);
+         
           if (res.data.insertedId) {
             navigate('/dashboard/my-parcels')
             Swal.fire({
@@ -66,7 +66,7 @@ const navigate = useNavigate();
       }
     });
 
-    console.log(isSameDistrict, data);
+    
   };
   const regionsDuplicate = serviceCenters.map((c) => c.region);
   const regions = [...new Set(regionsDuplicate)];

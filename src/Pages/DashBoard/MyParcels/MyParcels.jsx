@@ -30,7 +30,7 @@ const MyParcels = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/parcels/${id}`).then((res) => {
-          console.log(res.data);
+          
           if (res.data.deletedCount) {
             refetch();
             Swal.fire({
