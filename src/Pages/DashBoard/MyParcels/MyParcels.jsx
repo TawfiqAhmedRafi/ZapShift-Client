@@ -10,7 +10,7 @@ import { Link } from "react-router";
 const MyParcels = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const { data: parcels = [] , refetch} = useQuery({
+  const { data: parcels = [], refetch } = useQuery({
     queryKey: ["my-parcels", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/parcels?email=${user.email}`);
@@ -43,12 +43,24 @@ const MyParcels = () => {
       }
     });
   };
+  const handlePayment = async (parcel) => {
+    const paymentInfo = {
+      cost: parcel.cost,
+      parcelId: parcel._id,
+      senderEmail: parcel.senderEmail,
+      parcelName: parcel.parcelName,
+    };
+    const res = await axiosSecure.post(
+      "/payment-checkout-session",
+      paymentInfo
+    );
+
+    window.location.assign(res.data.url);
+  };
 
   return (
     <div>
-      <h2 className="text-4xl font-bold text-secondary">
-        All my Parcels
-      </h2>
+      <h2 className="text-4xl font-bold text-secondary">All my Parcels</h2>
       <div className="overflow-x-auto">
         <table className="table table-zebra">
           {/* head */}
@@ -70,12 +82,48 @@ const MyParcels = () => {
                   <td>{parcel.parcelName}</td>
                   <td>{parcel.cost}</td>
                   <td>
-                    {
-                    parcel.paymentStatus === 'paid'?
-                    <span className="text-green-400">Pain</span> : <Link to={`/dashboard/payment/${parcel._id}`}>
-                    <button className="btn btn-primary  btn-sm text-black">Pay Now</button>
-                    </Link>
-                    }
+                    {parcel.paymentStatus === "paid" ? (
+                      <div className="badge badge-success">
+                        <svg
+                          className="size-[1em]"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                        >
+                          <g
+                            fill="currentColor"
+                            strokeLinejoin="miter"
+                            strokeLinecap="butt"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeLinecap="square"
+                              stroke-miterlimit="10"
+                              strokeWidth="2"
+                            ></circle>
+                            <polyline
+                              points="7 13 10 16 17 8"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeLinecap="square"
+                              stroke-miterlimit="10"
+                              strokeWidth="2"
+                            ></polyline>
+                          </g>
+                        </svg>
+                        Paid
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => handlePayment(parcel)}
+                        className="btn btn-primary  btn-sm text-black"
+                      >
+                        Pay Now
+                      </button>
+                    )}
                   </td>
                   <td>{parcel.deliveryStatus}</td>
                   <td className="flex flex-col md:flex-row gap-4 md:gap-0">
