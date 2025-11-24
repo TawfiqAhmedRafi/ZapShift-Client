@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import Logo from "../Components/Logo/Logo";
-import { FaAngleDown, FaBell, FaBox  } from "react-icons/fa";
+import { FaAngleDown, FaBell, FaBox, FaRegCreditCard  } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 
 const DashBoardLayout = () => {
@@ -122,6 +122,18 @@ const DashBoardLayout = () => {
                   <FaBox />
                 </span>
                 <span className="is-drawer-close:hidden">My Parcels</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/payment-history"
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="Payment History"
+              >
+                <span>
+                  <FaRegCreditCard></FaRegCreditCard>
+                </span>
+                <span className="is-drawer-close:hidden"> Payment History</span>
               </NavLink>
             </li>
 
