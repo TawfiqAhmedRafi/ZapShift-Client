@@ -3,9 +3,19 @@ import { Link, NavLink, Outlet } from "react-router";
 import Logo from "../Components/Logo/Logo";
 import { FaAngleDown, FaBell, FaBox, FaRegCreditCard  } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const DashBoardLayout = () => {
-  const { user } = useAuth();
+  const { user , logOut } = useAuth();
+  const handleLogout =()=>{
+    logOut()
+          .then(()=>{
+            toast("logged out succesfully")
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+  }
   return (
     <div className="drawer max-w-7xl mx-auto lg:drawer-open bg-base-300">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -56,7 +66,7 @@ const DashBoardLayout = () => {
               <summary className=" btn  btn-ghost "><FaAngleDown /></summary>
               <ul className="menu dropdown-content bg-base-100 rounded-box z-1 -ml-10  p-2 shadow-sm">
                 <li>
-                  <a>Logout</a>
+                  <button className="btn hover:btn-primary" onClick={handleLogout}>Logout</button>
                 </li>
                
               </ul>

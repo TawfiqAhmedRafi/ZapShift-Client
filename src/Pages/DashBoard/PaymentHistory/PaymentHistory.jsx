@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import useAuth from "../../../hooks/useAuth";
+import { format } from "date-fns";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const PaymentHistory = () => {
@@ -39,7 +40,9 @@ const PaymentHistory = () => {
                 className="border-t border-gray-200 hover:bg-gray-50 transition-all duration-200"
               >
                 <td className="py-2 px-2 md:px-4">{index + 1}</td>
-                <td className="py-2 px-2 md:px-4 font-medium">{payment.parcelName}</td>
+                <td className="py-2 px-2 md:px-4 font-medium">
+                  {payment.parcelName}
+                </td>
                 <td className="py-2 px-2 md:px-4">
                   <div className="space-y-1 text-gray-700 text-sm md:text-base">
                     <p className="font-semibold">{payment.receiverName}</p>
@@ -50,10 +53,16 @@ const PaymentHistory = () => {
                     <p className="text-gray-500">{payment.receiverPhone}</p>
                   </div>
                 </td>
-                <td className="py-2 px-2 md:px-4 font-mono text-gray-600">{payment.trackingId}</td>
+                <td className="py-2 px-2 md:px-4 font-mono text-gray-600">
+                  {payment.trackingId}
+                </td>
                 <td className="py-2 px-2 md:px-4 text-gray-800">
                   <span className="font-semibold">৳</span> {payment.amount} (
-                  <span className="capitalize">{payment.paymentStatus}</span>)
+                  <span className="capitalize">
+                    {payment.paymentStatus} at{" "}
+                    {format(new Date(payment.paidAt), "PPpp")}
+                  </span>
+                  )
                 </td>
                 <td className="py-2 px-2 md:px-4">
                   <button className="btn bg-[#94C6CB] hover:bg-[#7bb0b7] text-white font-medium px-4 py-2 rounded-md transition-all duration-200">
