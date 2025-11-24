@@ -164,6 +164,7 @@ const navigate = useNavigate();
                 className="input w-full"
                 defaultValue={user?.email}
                 placeholder="Email"
+                readOnly
               />
               {/* Sender phone */}
               <label className="label mt-4">Sender Phone Number</label>

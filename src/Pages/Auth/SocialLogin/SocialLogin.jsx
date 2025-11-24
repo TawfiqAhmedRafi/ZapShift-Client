@@ -3,16 +3,27 @@ import { useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import useAuth from "../../../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const SocialLogin = () => {
   const { googleSignIn } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const location = useLocation();
   const handleGoogle = () => {
     return googleSignIn()
-      .then(async () => {
+      .then((result) => {
         toast.success("Google sign-in successful!");
-        navigate(location?.state || "/");
+
+        const userInfo = {
+          email: result.user.email,
+          displayName: result.user.displayName,
+          photoURL: result.user.photoURL,
+        };
+        axiosSecure.post("/users", userInfo).then((res) => {
+          console.log("user data stored", res.data);
+          navigate(location?.state || "/");
+        });
       })
       .catch((error) => {
         const errorMessage = error.message;

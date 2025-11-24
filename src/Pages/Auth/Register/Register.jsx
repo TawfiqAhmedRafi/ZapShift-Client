@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import axios from "axios";
-
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 const Register = () => {
   const {
     register,
@@ -13,57 +13,63 @@ const Register = () => {
     formState: { errors },
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  const { registerUser , updateUserProfile } = useAuth();
+  const { registerUser, updateUserProfile } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation()
-
+  const location = useLocation();
+  const axiosSecure = useAxiosSecure();
 
   const handleRegistration = (data) => {
-    
-    const profileImg = data.photo[0] 
+    const profileImg = data.photo[0];
     registerUser(data.email, data.password)
       .then(() => {
         //console.log(result.user);
         // store the image and get photoURL
-        const formData= new FormData();
-        formData.append('image',profileImg)
-        const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`
+        const formData = new FormData();
+        formData.append("image", profileImg);
+        const image_API_URL = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_image_host_key
+        }`;
 
-        axios.post(image_API_URL, formData)
-        .then(res =>{
-          
-             // update user profile
-             const userProfile = {
-                displayName  : data.name  ,
-                photoURL : res.data.data.url
-             }
-             updateUserProfile(userProfile)
-             .then(()=>{
-             
-                navigate(location.state || '/');
-             }
-
-             )
-             .catch(error=>{
-                console.log(error)
-             })
-        })
-       
-
-        
+        axios.post(image_API_URL, formData).then((res) => {
+          const photoURL = res.data.data.url;
+          // create user in database
+          const userInfo = {
+            email:data.email ,
+            displayName : data.name , 
+            photoURL : photoURL
+          };
+          axiosSecure.post("/users",userInfo)
+          .then(res=>{
+            if(res.data.insertedId){
+              console.log('user created in database')
+            }
+          });
+          // update user profile
+          const userProfile = {
+            displayName: data.name,
+            photoURL: photoURL,
+          };
+          updateUserProfile(userProfile)
+            .then(() => {
+              navigate(location.state || "/");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        });
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  
+
   return (
     <div>
-     <h2  className="text-4xl font-bold text-secondary">Create an Account</h2>
-      
+      <h2 className="text-4xl font-bold text-secondary">Create an Account</h2>
+
       <form onSubmit={handleSubmit(handleRegistration)}>
         <fieldset className="fieldset">
-            {/* Name */}
+          {/* Name */}
           <label className="label">Name</label>
           <input
             type="text"
@@ -74,9 +80,9 @@ const Register = () => {
           {errors.email?.type === "required" && (
             <p className="text-red-500">Name is Required</p>
           )}
-            {/* photo */}
+          {/* photo */}
           <label className="label">Photo</label>
-          
+
           <input
             type="file"
             {...register("photo", { required: true })}
@@ -86,7 +92,7 @@ const Register = () => {
           {errors.email?.type === "required" && (
             <p className="text-red-500">Photo is Required</p>
           )}
-            {/* email */}
+          {/* email */}
           <label className="label">Email</label>
           <input
             type="email"
@@ -130,20 +136,21 @@ const Register = () => {
               and 1 special character{" "}
             </p>
           )}
-          
+
           <button className="btn btn-primary mt-4">Register</button>
         </fieldset>
         <p>
           Already have an account?
           <Link
-          state={location.state}
-          to="/login" className="text-primary hover:underline">
+            state={location.state}
+            to="/login"
+            className="text-primary hover:underline"
+          >
             Login
           </Link>{" "}
         </p>
         <SocialLogin></SocialLogin>
       </form>
-      
     </div>
   );
 };

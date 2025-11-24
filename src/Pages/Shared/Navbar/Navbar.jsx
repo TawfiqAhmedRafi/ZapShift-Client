@@ -44,6 +44,11 @@ const Navbar = () => {
           Coverage
         </NavLink>
       </li>
+      <li className="mr-2">
+        <NavLink className={getLinkClass} to="/rider">
+          Be a Rider
+        </NavLink>
+      </li>
       {
         user &&  <li className="mr-2">
         <NavLink className={getLinkClass} to="/dashboard/my-parcels">
@@ -81,7 +86,7 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <Link to="/" className="btn btn-ghost  text-xl">
+        <Link to="/" className="mb-1  text-xl">
           <Logo></Logo>
         </Link>
       </div>
