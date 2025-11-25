@@ -4,7 +4,6 @@ import { Link, NavLink } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
 
-
 const Navbar = () => {
   const getLinkClass = ({ isActive }) =>
     `px-3 py-2 rounded-3xl font-medium ${
@@ -14,8 +13,8 @@ const Navbar = () => {
 
   const handleLogOut = () => {
     logOut()
-      .then(()=>{
-        toast("logged out succesfully")
+      .then(() => {
+        toast("logged out succesfully");
       })
       .catch((error) => {
         console.log(error);
@@ -28,7 +27,11 @@ const Navbar = () => {
           Services
         </NavLink>
       </li>
-
+      <li className="mr-2">
+        <NavLink className={getLinkClass} to="/pricing">
+          Pricing
+        </NavLink>
+      </li>
       <li className="mr-2">
         <NavLink to="/aboutUs" className={getLinkClass}>
           About Us
@@ -44,18 +47,14 @@ const Navbar = () => {
           Coverage
         </NavLink>
       </li>
-      <li className="mr-2">
-        <NavLink className={getLinkClass} to="/rider">
-          Be a Rider
-        </NavLink>
-      </li>
-      {
-        user &&  <li className="mr-2">
-        <NavLink className={getLinkClass} to="/dashboard/my-parcels">
-          My Parcels
-        </NavLink>
-      </li>
-      }
+
+      {user && (
+        <li className="mr-2">
+          <NavLink className={getLinkClass} to="/dashboard/my-parcels">
+            My Parcels
+          </NavLink>
+        </li>
+      )}
     </>
   );
   return (
@@ -169,16 +168,10 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <NavLink
-                  to="/login"
-                  className="btn  outline-0 shadow-none"
-                >
+                <NavLink to="/login" className="btn  outline-0 shadow-none">
                   Login
                 </NavLink>
-                <NavLink
-                  to="/register"
-                  className="btn  outline-0 shadow-none"
-                >
+                <NavLink to="/register" className="btn  outline-0 shadow-none">
                   Register
                 </NavLink>
                 <Link

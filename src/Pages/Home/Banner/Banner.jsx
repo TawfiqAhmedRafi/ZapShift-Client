@@ -5,6 +5,7 @@ import b1 from "../../../assets/banner/banner1.png";
 import b2 from "../../../assets/banner/banner2.png";
 import b3 from "../../../assets/banner/banner3.png";
 import { FaArrowCircleUp } from "react-icons/fa";
+import { Link } from "react-router";
 
 const Banner = () => {
   return (
@@ -33,9 +34,9 @@ const Banner = () => {
               Track Your Parcel
             </button>
             <FaArrowCircleUp className="rotate-45 text-3xl sm:text-3xl mt-1 sm:mt-0" />
-            <button className="btn rounded-lg text-[12px]  sm:text-base px-3 sm:px-5 py-1 sm:py-3">
+            <Link to="/rider" className="btn rounded-lg text-[12px]  sm:text-base px-3 sm:px-5 py-1 sm:py-3">
               Be a Rider
-            </button>
+            </Link>
           </div>
         </div>
       ))}

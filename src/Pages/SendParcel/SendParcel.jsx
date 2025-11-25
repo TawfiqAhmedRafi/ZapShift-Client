@@ -7,7 +7,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const SendParcel = () => {
   const serviceCenters = useLoaderData();
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const {
@@ -38,7 +38,7 @@ const navigate = useNavigate();
       }
     }
     data.cost = cost;
-   
+
     Swal.fire({
       title: "Agree with the cost? ",
       text: `You will be charged ${cost} taka !!`,
@@ -51,9 +51,8 @@ const navigate = useNavigate();
       if (result.isConfirmed) {
         //  save parcel to database
         axiosSecure.post("/parcels", data).then((res) => {
-         
           if (res.data.insertedId) {
-            navigate('/dashboard/my-parcels')
+            navigate("/dashboard/my-parcels");
             Swal.fire({
               position: "center",
               icon: "success",
@@ -65,8 +64,6 @@ const navigate = useNavigate();
         });
       }
     });
-
-    
   };
   const regionsDuplicate = serviceCenters.map((c) => c.region);
   const regions = [...new Set(regionsDuplicate)];
@@ -176,7 +173,7 @@ const navigate = useNavigate();
               />
               {/* sender region */}
               <fieldset className="fieldset">
-                <legend className="fieldset-legend">Sender Regions</legend>
+                <legend className="fieldset-legend">Sender Region</legend>
                 <select
                   {...register("senderRegion")}
                   defaultValue="Pick a Region"
@@ -192,7 +189,7 @@ const navigate = useNavigate();
               </fieldset>
               {/* sender districts */}
               <fieldset className="fieldset">
-                <legend className="fieldset-legend">Sender Districts</legend>
+                <legend className="fieldset-legend">Sender District</legend>
                 <select
                   {...register("senderDistrict")}
                   defaultValue="Pick a District"
@@ -256,7 +253,7 @@ const navigate = useNavigate();
 
               {/* Receiver region */}
               <fieldset className="fieldset">
-                <legend className="fieldset-legend">Receiver Regions</legend>
+                <legend className="fieldset-legend">Receiver Region</legend>
                 <select
                   {...register("receiverRegion")}
                   defaultValue="Pick a Region"
@@ -272,7 +269,7 @@ const navigate = useNavigate();
               </fieldset>
               {/* Receiver districts */}
               <fieldset className="fieldset">
-                <legend className="fieldset-legend">Receiver Districts</legend>
+                <legend className="fieldset-legend">Receiver District</legend>
                 <select
                   {...register("receiverDistrict")}
                   defaultValue="Pick a District"

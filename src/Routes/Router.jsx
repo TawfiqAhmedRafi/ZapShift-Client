@@ -21,6 +21,8 @@ import PaymentCancelled from "../Pages/DashBoard/Payment/PaymentCancelled";
 import PaymentHistory from "../Pages/DashBoard/PaymentHistory/PaymentHistory";
 import ApproveRiders from "../Pages/DashBoard/ApproveRiders/ApproveRiders";
 
+import PricingCalculator from "../Pages/Home/Calculator/PricingCalculator";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -34,6 +36,11 @@ export const router = createBrowserRouter([
         path: "coverage",
         Component: Coverage,
         loader: () => fetch("/serviceCenter.json").then((res) => res.json()),
+      },
+      {
+          path : 'pricing',
+         Component : PricingCalculator,
+         loader: () => fetch("/serviceCenter.json").then((res) => res.json()),
       },
       {
         path: "rider",
