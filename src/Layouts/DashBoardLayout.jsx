@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import Logo from "../Components/Logo/Logo";
-import { FaAngleDown, FaBell, FaBox, FaRegCreditCard  } from "react-icons/fa";
+import { FaAngleDown, FaBell, FaBox, FaMotorcycle, FaRegCreditCard  } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
 
@@ -134,7 +134,7 @@ const DashBoardLayout = () => {
                 <span className="is-drawer-close:hidden">My Parcels</span>
               </NavLink>
             </li>
-            <li>
+           <li>
               <NavLink
                 to="/dashboard/payment-history"
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
@@ -146,6 +146,20 @@ const DashBoardLayout = () => {
                 <span className="is-drawer-close:hidden"> Payment History</span>
               </NavLink>
             </li>
+            
+            <li>
+              <NavLink
+                to="/dashboard/approve-riders"
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="Approve Riders"
+              >
+                <span>
+                  <FaMotorcycle></FaMotorcycle>
+                </span>
+                <span className="is-drawer-close:hidden"> Approve Riders</span>
+              </NavLink>
+            </li>
+            
 
             {/* Settings */}
             <li>
