@@ -15,6 +15,7 @@ import useRole from "../hooks/useRole";
 
 const DashBoardLayout = () => {
   const { role } = useRole();
+  
   const { user, logOut } = useAuth();
   const handleLogout = () => {
     logOut()

@@ -14,7 +14,7 @@ const UsersManagement = () => {
       return res.data;
     },
   });
-  const handleMakeUser = (user) => {
+  const handleMakeAdmin = (user) => {
     Swal.fire({
       title: "Are you sure?",
       text: `Do you want to make ${user.displayName} an admin?`,
@@ -27,7 +27,7 @@ const UsersManagement = () => {
       if (result.isConfirmed) {
         const roleInfo = { role: "admin" };
 
-        axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+        axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
           if (res.data.modifiedCount) {
             Swal.fire({
               position: "center",
@@ -56,7 +56,7 @@ const UsersManagement = () => {
       if (result.isConfirmed) {
         const roleInfo = { role: "user" };
 
-        axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+        axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
           if (res.data.modifiedCount) {
             Swal.fire({
               position: "center",
@@ -122,7 +122,7 @@ const UsersManagement = () => {
                     </button>
                   ) : (
                     <button
-                      onClick={() => handleMakeUser(user)}
+                      onClick={() => handleMakeAdmin(user)}
                       className="text-green-500"
                     >
                       <FaUserShield size={24} />

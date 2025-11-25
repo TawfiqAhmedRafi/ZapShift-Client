@@ -23,6 +23,7 @@ import ApproveRiders from "../Pages/DashBoard/ApproveRiders/ApproveRiders";
 
 import PricingCalculator from "../Pages/Home/Calculator/PricingCalculator";
 import UsersManagement from "../Pages/DashBoard/UsersManagement/UsersManagement";
+import AdminRoute from "./AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -39,9 +40,9 @@ export const router = createBrowserRouter([
         loader: () => fetch("/serviceCenter.json").then((res) => res.json()),
       },
       {
-          path : 'pricing',
-         Component : PricingCalculator,
-         loader: () => fetch("/serviceCenter.json").then((res) => res.json()),
+        path: "pricing",
+        Component: PricingCalculator,
+        loader: () => fetch("/serviceCenter.json").then((res) => res.json()),
       },
       {
         path: "rider",
@@ -100,36 +101,45 @@ export const router = createBrowserRouter([
         <DashBoardLayout></DashBoardLayout>
       </PrivateRoute>
     ),
-    children : [
+    children: [
       {
-        path : 'my-parcels',
-        Component : MyParcels
+        path: "my-parcels",
+        Component: MyParcels,
       },
       {
-        path : 'payment/:parcelId',
-        Component : Payment
+        path: "payment/:parcelId",
+        Component: Payment,
       },
       {
-        path : "payment-success",
-        Component : PaymentSuccess
+        path: "payment-success",
+        Component: PaymentSuccess,
       },
       {
-        path : "payment-cancelled",
-        Component : PaymentCancelled
+        path: "payment-cancelled",
+        Component: PaymentCancelled,
       },
       {
-        path : 'users-management' ,
-        Component : UsersManagement
+        path: "users-management",
+        element: (
+          <AdminRoute>
+            <UsersManagement></UsersManagement>
+          </AdminRoute>
+        ),
+        
       },
       {
-        path : 'payment-history',
-        Component : PaymentHistory
+        path: "payment-history",
+        Component: PaymentHistory,
       },
       {
-        path : 'approve-riders',
-        Component : ApproveRiders
-      }
-    ]
+        path: "approve-riders",
+        element: (
+          <AdminRoute>
+            <ApproveRiders></ApproveRiders>
+          </AdminRoute>
+        ),
+      },
+    ],
   },
 
   {

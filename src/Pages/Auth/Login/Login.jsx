@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
@@ -11,8 +11,14 @@ const Login = () => {
   const { SignInUser } = useAuth();
   const location = useLocation();
   
-  const { register, handleSubmit , watch } = useForm();
-  const watchEmail = watch("email", ""); 
+ const { register, handleSubmit, control } = useForm();
+
+const watchEmail = useWatch({
+  control,
+  name: "email",
+  defaultValue: ""
+});
+
   const handleLogin = (data) => {
     SignInUser(data.email, data.password)
       .then((result) =>  {
