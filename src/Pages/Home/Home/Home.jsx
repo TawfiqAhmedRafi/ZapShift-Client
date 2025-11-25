@@ -8,6 +8,7 @@ import Review from '../Review/Review';
 import MerchantSection from '../MerchantSection/MerchantSection';
 import FAQSection from '../FAQSection/FAQSection';
 
+
 const reviewPromise = fetch('/reviews.json')
 .then((res)=>res.json())
 const Home = () => {
