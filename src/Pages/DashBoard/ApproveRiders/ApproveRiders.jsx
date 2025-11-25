@@ -7,17 +7,37 @@ import { format } from "date-fns";
 import { MdOutlineCancel } from "react-icons/md";
 import { useState } from "react";
 import { FaEye } from "react-icons/fa";
+import LoadingPage from "../../LoadingPage";
 
 const ApproveRiders = () => {
   const axiosSecure = useAxiosSecure();
   const [selectedRider, setSelectedRider] = useState(null);
-  const { refetch, data: riders = [] } = useQuery({
-    queryKey: ["riders"],
-    queryFn: async () => {
-      const res = await axiosSecure.get("/riders");
-      return res.data;
-    },
-  });
+
+  // Filter, sorting, and pagination state
+  const [statusFilter, setStatusFilter] = useState(""); // "" = all
+  const [sortOrder, setSortOrder] = useState("desc"); // default desc
+  const [page, setPage] = useState(1);
+  const limit =10
+
+ const { refetch, data: ridersData = {}, isFetching } = useQuery({
+  queryKey: ["riders", statusFilter, sortOrder, page, limit],
+  queryFn: async () => {
+    const res = await axiosSecure.get("/riders", {
+      params: {
+        status: statusFilter || undefined,
+        sortOrder,
+        page,
+        limit,
+      },
+    });
+    return res.data;
+  },
+  keepPreviousData: true, // avoid table flicker when changing page/filter
+});
+
+
+  const riders = ridersData.data || [];
+  const totalPages = ridersData.totalPages || 1;
 
   const statusClass = {
     pending:
@@ -101,6 +121,9 @@ const ApproveRiders = () => {
     setSelectedRider(res.data);
     document.getElementById("view_modal").showModal();
   };
+if (isFetching) {
+    return <LoadingPage />;
+  }
 
   return (
     <div className="p-4 md:p-8">
@@ -108,36 +131,65 @@ const ApproveRiders = () => {
         Approve Riders
       </h1>
 
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-6 rounded-lg p-4">
+  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+    <label className="font-semibold text-gray-700">Status:</label>
+    <select
+      value={statusFilter}
+      onChange={(e) => {
+        setStatusFilter(e.target.value);
+        setPage(1);
+      }}
+      className="w-full sm:w-auto border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#94C6CB] focus:border-[#94C6CB] transition-all"
+    >
+      <option value="">All Status</option>
+      <option value="pending">Pending</option>
+      <option value="approved">Approved</option>
+      <option value="rejected">Rejected</option>
+    </select>
+  </div>
+
+  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+    <label className="font-semibold text-gray-700">Sort By:</label>
+    <select
+      value={sortOrder}
+      onChange={(e) => setSortOrder(e.target.value)}
+      className="w-full sm:w-auto border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#94C6CB] focus:border-[#94C6CB] transition-all"
+    >
+      <option value="desc">Newest First</option>
+      <option value="asc">Oldest First</option>
+    </select>
+  </div>
+</div>
+
+
+      {/* Riders Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
           <thead className="bg-[#94C6CB]/20 text-gray-700">
             <tr>
               <th className="py-3 px-2 md:px-4 text-left">#</th>
               <th className="py-3 px-2 md:px-4 text-left">Name</th>
-
               <th className="py-3 px-2 md:px-4 text-left">Email</th>
               <th className="py-3 px-2 md:px-4 text-left">Region</th>
-
               <th className="py-3 px-2 md:px-4 text-center">Status</th>
               <th className="py-3 px-2 md:px-4 text-left"> Details</th>
               <th className="py-3 px-2 md:px-4 text-left">Actions</th>
             </tr>
           </thead>
-
           <tbody>
             {riders.map((rider, index) => (
               <tr
                 key={rider._id}
                 className="border-t border-gray-200 hover:bg-gray-50 transition-all duration-200"
               >
-                <td className="py-2 px-2 md:px-4">{index + 1}</td>
+                <td className="py-2 px-2 md:px-4">{index + 1 + (page-1)*limit}</td>
                 <td className="py-2 px-2 md:px-4 font-medium">{rider.name}</td>
-
                 <td className="py-2 px-2 md:px-4">{rider.Email}</td>
                 <td className="py-2 px-2 md:px-4">
                   {rider.region}, {rider.district}
                 </td>
-
                 <td className="py-2 px-2 md:px-4 text-center">
                   <span className={statusClass[rider.status]}>
                     {rider.status}
@@ -148,7 +200,7 @@ const ApproveRiders = () => {
                     onClick={() => handleView(rider._id)}
                     className="btn bg-[#94C6CB] hover:bg-[#7bb0b7] text-white font-medium px-4 py-2 rounded-md transition-all duration-200"
                   >
-                    <FaEye></FaEye>
+                    <FaEye />
                   </button>
                 </td>
                 <td className="py-2 px-2 md:px-4 flex gap-2 md:gap-3">
@@ -180,6 +232,28 @@ const ApproveRiders = () => {
           <p className="text-center py-6 text-gray-500">No riders available.</p>
         )}
       </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center items-center gap-3 mt-4">
+        <button
+          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          disabled={page === 1}
+          className="btn btn-sm"
+        >
+          Previous
+        </button>
+        <span className="font-mono">
+          Page {page} of {totalPages}
+        </span>
+        <button
+          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+          disabled={page === totalPages}
+          className="btn btn-sm"
+        >
+          Next
+        </button>
+      </div>
+
       <dialog
         id="view_modal"
         className="modal modal-bottom sm:modal-middle relative"

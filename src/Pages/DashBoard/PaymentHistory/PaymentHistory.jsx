@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { format } from "date-fns";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -7,13 +7,29 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 const PaymentHistory = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const { data: payments = [] } = useQuery({
-    queryKey: ["payments", user.email],
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["payments", user.email, page],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/payments?email=${user.email}`);
+      const res = await axiosSecure.get(
+        `/payments?email=${user.email}&page=${page}`
+      );
       return res.data;
     },
+    keepPreviousData: true, 
   });
+
+  const payments = data?.data || [];
+  const totalPages = data?.totalPages || 1;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <span className="loading loading-bars text-primary loading-xl"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-8">
@@ -39,7 +55,7 @@ const PaymentHistory = () => {
                 key={payment._id}
                 className="border-t border-gray-200 hover:bg-gray-50 transition-all duration-200"
               >
-                <td className="py-2 px-2 md:px-4">{index + 1}</td>
+                <td className="py-2 px-2 md:px-4">{(page - 1) * 10 + index + 1}</td>
                 <td className="py-2 px-2 md:px-4 font-medium">
                   {payment.parcelName}
                 </td>
@@ -73,6 +89,27 @@ const PaymentHistory = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="btn btn-outline btn-primary px-4 py-2 rounded-md disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span className="font-mono">
+          Page {page} of {totalPages}
+        </span>
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={page === totalPages}
+          className="btn btn-outline btn-primary px-4 py-2 rounded-md disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
