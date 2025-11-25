@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import Logo from "../Components/Logo/Logo";
-import { FaAngleDown, FaBell, FaBox, FaMotorcycle, FaRegCreditCard  } from "react-icons/fa";
+import { FaAngleDown, FaBell, FaBox, FaMotorcycle, FaRegCreditCard, FaUsers  } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
 
@@ -16,6 +16,13 @@ const DashBoardLayout = () => {
             console.log(error);
           });
   }
+  const getNavLinkClass = ({isActive}) => {
+    return `
+      flex items-center gap-2 px-4 py-2 rounded
+      is-drawer-close:tooltip is-drawer-close:tooltip-right
+      ${isActive ? "bg-primary text-white" : "text-gray-700 hover:bg-gray-200"}
+    `;
+  };
   return (
     <div className="drawer max-w-7xl mx-auto lg:drawer-open bg-base-300">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -99,9 +106,9 @@ const DashBoardLayout = () => {
           <ul className="menu w-full grow">
             {/* Homepage */}
             <li>
-              <Link
+              <NavLink
                 to="/"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                className={getNavLinkClass}
                 data-tip="Homepage"
               >
                 <svg
@@ -118,14 +125,14 @@ const DashBoardLayout = () => {
                   <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 </svg>
                 <span className="is-drawer-close:hidden">Homepage</span>
-              </Link>
+              </NavLink>
             </li>
 
             {/* My Parcels */}
             <li>
               <NavLink
                 to="/dashboard/my-parcels"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                 className={getNavLinkClass}
                 data-tip="My Parcel"
               >
                 <span>
@@ -137,7 +144,7 @@ const DashBoardLayout = () => {
            <li>
               <NavLink
                 to="/dashboard/payment-history"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                className={getNavLinkClass}
                 data-tip="Payment History"
               >
                 <span>
@@ -150,13 +157,25 @@ const DashBoardLayout = () => {
             <li>
               <NavLink
                 to="/dashboard/approve-riders"
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                className={getNavLinkClass}
                 data-tip="Approve Riders"
               >
                 <span>
                   <FaMotorcycle></FaMotorcycle>
                 </span>
                 <span className="is-drawer-close:hidden"> Approve Riders</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink 
+                to="/dashboard/users-management"
+                className={getNavLinkClass}
+                data-tip="Users Management"
+              >
+                <span>
+                  <FaUsers></FaUsers>
+                </span>
+                <span className="is-drawer-close:hidden"> Users Management</span>
               </NavLink>
             </li>
             
