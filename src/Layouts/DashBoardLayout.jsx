@@ -1,22 +1,31 @@
 import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import Logo from "../Components/Logo/Logo";
-import { FaAngleDown, FaBell, FaBox, FaMotorcycle, FaRegCreditCard, FaUsers  } from "react-icons/fa";
+import {
+  FaAngleDown,
+  FaBell,
+  FaBox,
+  FaMotorcycle,
+  FaRegCreditCard,
+  FaUsers,
+} from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
+import useRole from "../hooks/useRole";
 
 const DashBoardLayout = () => {
-  const { user , logOut } = useAuth();
-  const handleLogout =()=>{
+  const { role } = useRole();
+  const { user, logOut } = useAuth();
+  const handleLogout = () => {
     logOut()
-          .then(()=>{
-            toast("logged out succesfully")
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-  }
-  const getNavLinkClass = ({isActive}) => {
+      .then(() => {
+        toast("logged out succesfully");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const getNavLinkClass = ({ isActive }) => {
     return `
       flex items-center gap-2 px-4 py-2 rounded
       is-drawer-close:tooltip is-drawer-close:tooltip-right
@@ -57,25 +66,31 @@ const DashBoardLayout = () => {
           {/* Right side: user info */}
           <div className="flex items-center gap-2 ml-auto">
             <button className="btn rounded-full">
-              <FaBell />  
+              <FaBell />
             </button>
-            
+
             <img
               src={user.photoURL}
               className="rounded-full w-10 h-10"
               alt={user.displayName || "User"}
             />
             <div>
-                <p>{user.displayName}</p>
-                <p className="text-[12px] text-gray-500">{user.email}</p>
+              <p>{user.displayName}</p>
+              <p className="text-[12px] text-gray-500">{user.email}</p>
             </div>
             <details className="dropdown">
-              <summary className=" btn  btn-ghost "><FaAngleDown /></summary>
+              <summary className=" btn  btn-ghost ">
+                <FaAngleDown />
+              </summary>
               <ul className="menu dropdown-content bg-base-100 rounded-box z-1 -ml-10  p-2 shadow-sm">
                 <li>
-                  <button className="btn hover:btn-primary" onClick={handleLogout}>Logout</button>
+                  <button
+                    className="btn hover:btn-primary"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
                 </li>
-               
               </ul>
             </details>
           </div>
@@ -83,9 +98,8 @@ const DashBoardLayout = () => {
 
         {/* Page content */}
         <div className="bg-base-100 m-8 p-4 md:p-8 rounded-2xl ">
-            <Outlet /> 
+          <Outlet />
         </div>
-       
       </div>
 
       {/* Drawer sidebar */}
@@ -106,11 +120,7 @@ const DashBoardLayout = () => {
           <ul className="menu w-full grow">
             {/* Homepage */}
             <li>
-              <NavLink
-                to="/"
-                className={getNavLinkClass}
-                data-tip="Homepage"
-              >
+              <NavLink to="/" className={getNavLinkClass} data-tip="Homepage">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -132,7 +142,7 @@ const DashBoardLayout = () => {
             <li>
               <NavLink
                 to="/dashboard/my-parcels"
-                 className={getNavLinkClass}
+                className={getNavLinkClass}
                 data-tip="My Parcel"
               >
                 <span>
@@ -141,7 +151,7 @@ const DashBoardLayout = () => {
                 <span className="is-drawer-close:hidden">My Parcels</span>
               </NavLink>
             </li>
-           <li>
+            <li>
               <NavLink
                 to="/dashboard/payment-history"
                 className={getNavLinkClass}
@@ -153,32 +163,41 @@ const DashBoardLayout = () => {
                 <span className="is-drawer-close:hidden"> Payment History</span>
               </NavLink>
             </li>
-            
-            <li>
-              <NavLink
-                to="/dashboard/approve-riders"
-                className={getNavLinkClass}
-                data-tip="Approve Riders"
-              >
-                <span>
-                  <FaMotorcycle></FaMotorcycle>
-                </span>
-                <span className="is-drawer-close:hidden"> Approve Riders</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink 
-                to="/dashboard/users-management"
-                className={getNavLinkClass}
-                data-tip="Users Management"
-              >
-                <span>
-                  <FaUsers></FaUsers>
-                </span>
-                <span className="is-drawer-close:hidden"> Users Management</span>
-              </NavLink>
-            </li>
-            
+
+            {role === "admin" && (
+              <>
+                <li>
+                  <NavLink
+                    to="/dashboard/approve-riders"
+                    className={getNavLinkClass}
+                    data-tip="Approve Riders"
+                  >
+                    <span>
+                      <FaMotorcycle></FaMotorcycle>
+                    </span>
+                    <span className="is-drawer-close:hidden">
+                      {" "}
+                      Approve Riders
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/dashboard/users-management"
+                    className={getNavLinkClass}
+                    data-tip="Users Management"
+                  >
+                    <span>
+                      <FaUsers></FaUsers>
+                    </span>
+                    <span className="is-drawer-close:hidden">
+                      {" "}
+                      Users Management
+                    </span>
+                  </NavLink>
+                </li>
+              </>
+            )}
 
             {/* Settings */}
             <li>

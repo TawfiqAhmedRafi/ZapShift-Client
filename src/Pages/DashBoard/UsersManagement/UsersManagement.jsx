@@ -7,47 +7,71 @@ import Swal from "sweetalert2";
 
 const UsersManagement = () => {
   const axiosSecure = useAxiosSecure();
-  const {refetch, data: users = [] } = useQuery({
+  const { refetch, data: users = [] } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users`);
       return res.data;
     },
   });
-const handleMakeUser =(user)=>{
-    const roleInfo ={role : 'admin'}
-    axiosSecure.patch(`/users/${user._id}`,roleInfo)
-    .then(res=>{
-        if(res.data.modifiedCount){
-            Swal.fire({
-                position : "center",
-                icon :"success",
-                title: `${user.displayName} mark as an admin`,
-                showCancelButton :false,
-                timer :2000
-            })
-            refetch();
-        }
-    })
-}
+  const handleMakeUser = (user) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Do you want to make ${user.displayName} an admin?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, make admin",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const roleInfo = { role: "admin" };
 
-const handleRemoveAdmin = (user)=>{
-      const roleInfo ={role : 'user'}
-      axiosSecure.patch(`/users/${user._id}`,roleInfo)
-    .then(res=>{
-        if(res.data.modifiedCount){
-            
-           Swal.fire({
-            position : "center",
-            icon :"success",
-            title: `${user.displayName} mark as a user`,
-            showCancelButton :false,
-            timer :2000
-           })
-           refetch();
-        }
-    })
-}
+        axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+          if (res.data.modifiedCount) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: `${user.displayName} is now an admin`,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+            refetch();
+          }
+        });
+      }
+    });
+  };
+
+  const handleRemoveAdmin = (user) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Do you want to remove admin access from ${user.displayName}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, remove admin",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const roleInfo = { role: "user" };
+
+        axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+          if (res.data.modifiedCount) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: `${user.displayName} is now a normal user`,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+
+            refetch();
+          }
+        });
+      }
+    });
+  };
 
   return (
     <div>
@@ -82,7 +106,7 @@ const handleRemoveAdmin = (user)=>{
                     </div>
                     <div>
                       <div className="font-bold">{user.displayName}</div>
-                      <div className="text-sm opacity-50">United States</div>
+                      <div className="text-sm opacity-50"></div>
                     </div>
                   </div>
                 </td>
@@ -90,11 +114,17 @@ const handleRemoveAdmin = (user)=>{
                 <td>{user.role}</td>
                 <td className="text-center">
                   {user.role === "admin" ? (
-                    <button onClick={()=>handleRemoveAdmin(user)} className="text-red-600">
+                    <button
+                      onClick={() => handleRemoveAdmin(user)}
+                      className="text-red-600"
+                    >
                       <FiShieldOff size={24} />
                     </button>
                   ) : (
-                    <button onClick={()=>handleMakeUser(user)} className="text-green-500">
+                    <button
+                      onClick={() => handleMakeUser(user)}
+                      className="text-green-500"
+                    >
                       <FaUserShield size={24} />
                     </button>
                   )}
