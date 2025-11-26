@@ -78,7 +78,15 @@ const DashBoardLayout = () => {
             />
             <div>
               <p>{user.displayName}</p>
-              <p className="text-[12px] text-gray-500">
+              <p
+                className={`text-[12px] font-bold ${
+                  role === "admin"
+                    ? "text-red-600"
+                    : role === "rider"
+                    ? "text-blue-600"
+                    : "text-green-600"
+                }`}
+              >
                 {role.charAt(0).toUpperCase() + role.slice(1)}
               </p>
             </div>

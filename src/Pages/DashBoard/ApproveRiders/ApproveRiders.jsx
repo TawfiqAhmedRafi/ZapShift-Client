@@ -1,21 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { FaTrashCan, FaUserCheck } from "react-icons/fa6";
+import { FaTrashCan, FaUserCheck, FaEye } from "react-icons/fa6";
 import { IoPersonRemoveSharp } from "react-icons/io5";
+import { MdOutlineCancel } from "react-icons/md";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
-import { MdOutlineCancel } from "react-icons/md";
-import { useState } from "react";
-import { FaEye } from "react-icons/fa";
+import { useState, useRef } from "react";
 import LoadingPage from "../../LoadingPage";
 
 const ApproveRiders = () => {
   const axiosSecure = useAxiosSecure();
   const [selectedRider, setSelectedRider] = useState(null);
+  const modalRef = useRef(null); 
 
-  // Filter, sorting, and pagination state
-  const [statusFilter, setStatusFilter] = useState(""); // "" = all
-  const [sortOrder, setSortOrder] = useState("desc"); // default desc
+ 
+  const [statusFilter, setStatusFilter] = useState(""); 
+  const [sortOrder, setSortOrder] = useState("desc"); 
   const [page, setPage] = useState(1);
   const limit = 10;
 
@@ -85,13 +85,10 @@ const ApproveRiders = () => {
           showConfirmButton: false,
         });
 
-        // Close the modal
-        const modal = document.getElementById("view_modal");
-        if (modal) {
-          modal.close();
-        }
+        
+        modalRef.current?.close();
 
-        // Clear selected rider
+        
         setSelectedRider(null);
       })
       .catch((err) => {
@@ -122,8 +119,9 @@ const ApproveRiders = () => {
   const handleView = async (id) => {
     const res = await axiosSecure.get(`/riders/${id}`);
     setSelectedRider(res.data);
-    document.getElementById("view_modal").showModal();
+    modalRef.current?.showModal(); // open modal using ref
   };
+
   if (isFetching) {
     return <LoadingPage />;
   }
@@ -179,7 +177,7 @@ const ApproveRiders = () => {
                 Application Status
               </th>
               <th className="py-3 px-2 md:px-4 text-center">Work Status</th>
-              <th className="py-3 px-2 md:px-4 text-left"> Details</th>
+              <th className="py-3 px-2 md:px-4 text-left">Details</th>
               <th className="py-3 px-2 md:px-4 text-left">Actions</th>
             </tr>
           </thead>
@@ -228,18 +226,21 @@ const ApproveRiders = () => {
                 <td className="py-2 px-2 md:px-4 flex gap-2 md:gap-3">
                   <button
                     onClick={() => updateRiderStatus(rider, "approved")}
+                    disabled={rider.workStatus === "in_delivery"}
                     className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition-all duration-200 flex items-center justify-center"
                   >
                     <FaUserCheck />
                   </button>
                   <button
                     onClick={() => updateRiderStatus(rider, "rejected")}
+                    disabled={rider.workStatus === "in_delivery"}
                     className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md transition-all duration-200 flex items-center justify-center"
                   >
                     <IoPersonRemoveSharp />
                   </button>
                   <button
                     onClick={() => deleteRider(rider._id)}
+                    disabled={rider.workStatus === "in_delivery"}
                     className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition-all duration-200 flex items-center justify-center"
                   >
                     <FaTrashCan />
@@ -276,76 +277,62 @@ const ApproveRiders = () => {
         </button>
       </div>
 
-      <dialog
-        id="view_modal"
-        className="modal modal-bottom sm:modal-middle relative"
-      >
+      {/* Modal */}
+      <dialog ref={modalRef} className="modal modal-bottom sm:modal-middle fixed inset-0 z-50 flex items-center justify-center overflow-auto">
         <div className="modal-box">
           <h3 className="font-bold text-xl mb-4">Rider Details</h3>
 
           {selectedRider && (
             <div className="space-y-2">
               <p>
-                <span className="font-semibold">Name:</span>{" "}
-                {selectedRider.name}
+                <span className="font-semibold">Name:</span> {selectedRider.name}
               </p>
               <p>
-                <span className="font-semibold">Email:</span>{" "}
-                {selectedRider.Email}
+                <span className="font-semibold">Email:</span> {selectedRider.Email}
               </p>
               <p>
-                <span className="font-semibold">Phone:</span>{" "}
-                {selectedRider.phoneNumber}
+                <span className="font-semibold">Phone:</span> {selectedRider.phoneNumber}
               </p>
-
               <p>
-                <span className="font-semibold">License:</span>{" "}
-                {selectedRider.license}
+                <span className="font-semibold">License:</span> {selectedRider.license}
               </p>
               <p>
                 <span className="font-semibold">NID:</span> {selectedRider.nid}
               </p>
-
               <p>
-                <span className="font-semibold">Area :</span>{" "}
-                {selectedRider.district} , {selectedRider.region}
-              </p>
-
-              <p>
-                <span className="font-semibold">Bike Model/Year:</span>{" "}
-                {selectedRider.bikeModelYear}
+                <span className="font-semibold">Area:</span> {selectedRider.district}, {selectedRider.region}
               </p>
               <p>
-                <span className="font-semibold">Bike Registration:</span>{" "}
-                {selectedRider.bikeReg}
+                <span className="font-semibold">Bike Model/Year:</span> {selectedRider.bikeModelYear}
               </p>
-
               <p>
-                <span className="font-semibold">About Rider:</span>{" "}
-                {selectedRider.aboutRider}
+                <span className="font-semibold">Bike Registration:</span> {selectedRider.bikeReg}
               </p>
-
               <p>
-                <span className="font-semibold">Status:</span>
+                <span className="font-semibold">About Rider:</span> {selectedRider.aboutRider}
+              </p>
+              <p>
+                <span className="font-semibold">Status:</span>{" "}
                 <span className={statusClass[selectedRider.status]}>
                   {selectedRider.status}
                 </span>
               </p>
-
               <p>
                 <span className="font-semibold">Apply Time:</span>{" "}
                 {format(new Date(selectedRider.createdAt), "PPpp")}
               </p>
-              <div></div>
+
               <div className="flex gap-3 mt-4">
                 <button
                   onClick={() => updateStatusModal(selectedRider, "approved")}
+                  disabled={selectedRider.workStatus === "in_delivery"}
                   className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md flex flex-1 items-center gap-2"
                 >
                   <FaUserCheck /> Approve
                 </button>
                 <button
                   onClick={() => updateStatusModal(selectedRider, "rejected")}
+                  disabled={selectedRider.workStatus === "in_delivery"}
                   className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-md flex flex-1 items-center gap-2"
                 >
                   <IoPersonRemoveSharp /> Reject
@@ -355,11 +342,12 @@ const ApproveRiders = () => {
           )}
 
           <div className="modal-action absolute top-1 right-5">
-            <form method="dialog">
-              <button className=" text-red-600">
-                <MdOutlineCancel />
-              </button>
-            </form>
+            <button
+              className="text-red-600"
+              onClick={() => modalRef.current?.close()}
+            >
+              <MdOutlineCancel />
+            </button>
           </div>
         </div>
       </dialog>

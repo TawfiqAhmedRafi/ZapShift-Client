@@ -178,10 +178,10 @@ const UsersManagement = () => {
                     <span
                       className={`badge ${
                         user.role === "admin"
-                          ? "badge-error text-red-800" 
+                          ? "badge-error text-red-800"
                           : user.role === "user"
-                          ? "badge-success text-green-700" 
-                          : "badge-info text-blue-800" 
+                          ? "badge-success text-green-700"
+                          : "badge-info text-blue-800"
                       } capitalize`}
                     >
                       {user.role}
@@ -191,7 +191,12 @@ const UsersManagement = () => {
                     {user.role === "admin" ? (
                       <button
                         onClick={() => handleRemoveAdmin(user)}
-                        className="text-red-600 hover:text-red-800 transition-colors"
+                        disabled={user.email === "rafi70722@gmail.com"}
+                        className={`text-red-600 hover:text-red-800 transition-colors ${
+                          user.email === "rafi70722@gmail.com"
+                            ? "opacity-50 cursor-not-allowed hover:text-red-600"
+                            : ""
+                        }`}
                       >
                         <FiShieldOff size={24} />
                       </button>
@@ -207,7 +212,12 @@ const UsersManagement = () => {
                   <td className="py-2 px-2 md:px-4 text-center">
                     <button
                       onClick={() => handleDelete(user._id)}
-                      className="text-red-600 hover:text-red-800 transition-colors"
+                      disabled={user.email === "rafi70722@gmail.com"}
+                      className={`text-red-600 hover:text-red-800 transition-colors ${
+                        user.email === "rafi70722@gmail.com"
+                          ? "opacity-50 cursor-not-allowed hover:text-red-600"
+                          : ""
+                      }`}
                     >
                       <FaTrashCan size={22} />
                     </button>

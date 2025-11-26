@@ -74,29 +74,39 @@ const MyParcels = () => {
   }
 
   return (
-    <div>
-      <h2 className="text-4xl font-bold text-secondary mb-6">All my Parcels</h2>
+    <div className="p-4 md:p-8">
+      <h2 className="text-4xl font-bold text-secondary mb-6">
+        All my Parcels
+      </h2>
+
       <div className="overflow-x-auto">
-        <table className="table table-zebra w-full">
-          <thead>
+        <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
+          <thead className="bg-[#94C6CB]/30 text-gray-700">
             <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Cost</th>
-              <th>Payment</th>
-              <th>Delivery Status</th>
-              <th>Tracking Id</th>
-              <th>Actions</th>
+              <th className="py-3 px-2 md:px-4">#</th>
+              <th className="py-3 px-2 md:px-4 text-left">Name</th>
+              <th className="py-3 px-2 md:px-4 text-left">Cost</th>
+              <th className="py-3 px-2 md:px-4 text-left">Payment</th>
+              <th className="py-3 px-2 md:px-4 text-left">Delivery Status</th>
+              <th className="py-3 px-2 md:px-4 text-left">Tracking Id</th>
+              <th className="py-3 px-2 md:px-4 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
             {parcels.map((parcel, index) => (
-              <tr key={parcel._id}>
-                <th>{(page - 1) * 10 + index + 1}</th>
-                <td>{parcel.parcelName}</td>
-                <td>{parcel.cost}</td>
+              <tr
+                key={parcel._id}
+                className="border-t border-gray-200 hover:bg-gray-50 "
+              >
+                <th className="py-2 px-2 md:px-4">
+                  {(page - 1) * 10 + index + 1}
+                </th>
+                <td className="py-2 px-2 md:px-4 font-medium">
+                  {parcel.parcelName}
+                </td>
+                <td className="py-2 px-2 md:px-4">{parcel.cost}</td>
 
-                <td>
+                <td className="py-2 px-2 md:px-4">
                   {parcel.paymentStatus === "paid" ? (
                     <div className="badge badge-success flex items-center gap-1">
                       <svg
@@ -122,27 +132,41 @@ const MyParcels = () => {
                     </button>
                   )}
                 </td>
-                <td>
+
+                <td
+                  className={`py-2 px-2 md:px-4 font-semibold ${
+                    parcel.deliveryStatus === "driver-assigned"
+                      ? "text-yellow-600"
+                      : parcel.deliveryStatus === "pending-pickup"
+                      ? "text-red-600"
+                      : "text-green-600"
+                  }`}
+                >
                   {parcel.deliveryStatus
                     ? parcel.deliveryStatus
                         .split("-")
                         .map(
-                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1)
                         )
                         .join(" ")
                     : ""}
                 </td>
-                <td className="font-mono">{parcel.trackingId}</td>
-                <td className="flex flex-col md:flex-row gap-2 md:gap-2">
-                  <button className="btn btn-square btn-primary">
+
+                <td className="py-2 px-2 md:px-4 font-mono">
+                  {parcel.trackingId}
+                </td>
+
+                <td className="py-2 px-2 md:px-4 flex flex-col md:flex-row gap-2 md:gap-2">
+                  <button className="btn btn-square btn-primary hover:scale-105 hover:shadow-md transition-transform duration-200">
                     <FaMagnifyingGlass />
                   </button>
-                  <button className="btn btn-square bg-[#94C6CB]">
+                  <button className="btn btn-square bg-[#94C6CB] hover:bg-[#7bb0b7] text-white transition-all duration-200">
                     <FiEdit />
                   </button>
                   <button
                     onClick={() => handleParcelDelete(parcel._id)}
-                    className="btn btn-square bg-red-400"
+                    className="btn btn-square bg-red-400 hover:bg-red-500 text-white transition-all duration-200"
                   >
                     <FaTrashCan />
                   </button>
