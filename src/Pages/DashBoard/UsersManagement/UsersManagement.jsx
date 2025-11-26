@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 import { FaTrashCan } from "react-icons/fa6";
 import LoadingPage from "../../LoadingPage";
 
-
 const UsersManagement = () => {
   const axiosSecure = useAxiosSecure();
   const [page, setPage] = useState(1);
@@ -58,18 +57,20 @@ const UsersManagement = () => {
       confirmButtonText: "Yes, make admin",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure.patch(`/users/${user._id}/role`, { role: "admin" }).then((res) => {
-          if (res.data.modifiedCount) {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: `${user.displayName} is now an admin`,
-              showConfirmButton: false,
-              timer: 2000,
-            });
-            refetch();
-          }
-        });
+        axiosSecure
+          .patch(`/users/${user._id}/role`, { role: "admin" })
+          .then((res) => {
+            if (res.data.modifiedCount) {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: `${user.displayName} is now an admin`,
+                showConfirmButton: false,
+                timer: 2000,
+              });
+              refetch();
+            }
+          });
       }
     });
   };
@@ -85,18 +86,20 @@ const UsersManagement = () => {
       confirmButtonText: "Yes, remove admin",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure.patch(`/users/${user._id}/role`, { role: "user" }).then((res) => {
-          if (res.data.modifiedCount) {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: `${user.displayName} is now a normal user`,
-              showConfirmButton: false,
-              timer: 2000,
-            });
-            refetch();
-          }
-        });
+        axiosSecure
+          .patch(`/users/${user._id}/role`, { role: "user" })
+          .then((res) => {
+            if (res.data.modifiedCount) {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: `${user.displayName} is now a normal user`,
+                showConfirmButton: false,
+                timer: 2000,
+              });
+              refetch();
+            }
+          });
       }
     });
   };
@@ -134,7 +137,7 @@ const UsersManagement = () => {
       </div>
 
       {/* Loading State */}
-      {(isLoading || isFetching) ? (
+      {isLoading || isFetching ? (
         <LoadingPage></LoadingPage>
       ) : (
         <div className="overflow-x-auto">
@@ -155,7 +158,9 @@ const UsersManagement = () => {
                   key={user._id}
                   className="border-t border-gray-200 hover:bg-gray-50 transition-all duration-200"
                 >
-                  <td className="py-2 px-2 md:px-4">{(page - 1) * limit + index + 1}</td>
+                  <td className="py-2 px-2 md:px-4">
+                    {(page - 1) * limit + index + 1}
+                  </td>
                   <td className="py-2 px-2 md:px-4">
                     <div className="flex items-center gap-3">
                       <div className="avatar">
@@ -169,7 +174,19 @@ const UsersManagement = () => {
                     </div>
                   </td>
                   <td className="py-2 px-2 md:px-4">{user.email}</td>
-                  <td className="py-2 px-2 md:px-4 capitalize font-medium">{user.role}</td>
+                  <td className="py-2 px-2 md:px-4 font-bold">
+                    <span
+                      className={`badge ${
+                        user.role === "admin"
+                          ? "badge-error text-red-800" 
+                          : user.role === "user"
+                          ? "badge-success text-green-700" 
+                          : "badge-info text-blue-800" 
+                      } capitalize`}
+                    >
+                      {user.role}
+                    </span>
+                  </td>
                   <td className="py-2 px-2 md:px-4 text-center">
                     {user.role === "admin" ? (
                       <button

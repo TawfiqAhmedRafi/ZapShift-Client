@@ -8,6 +8,7 @@ import {
   FaMotorcycle,
   FaRegCreditCard,
   FaUsers,
+  FaUserTie,
 } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
@@ -15,7 +16,7 @@ import useRole from "../hooks/useRole";
 
 const DashBoardLayout = () => {
   const { role } = useRole();
-  
+
   const { user, logOut } = useAuth();
   const handleLogout = () => {
     logOut()
@@ -77,7 +78,9 @@ const DashBoardLayout = () => {
             />
             <div>
               <p>{user.displayName}</p>
-              <p className="text-[12px] text-gray-500">{user.email}</p>
+              <p className="text-[12px] text-gray-500">
+                {role.charAt(0).toUpperCase() + role.slice(1)}
+              </p>
             </div>
             <details className="dropdown">
               <summary className=" btn  btn-ghost ">
@@ -179,6 +182,21 @@ const DashBoardLayout = () => {
                     <span className="is-drawer-close:hidden">
                       {" "}
                       Approve Riders
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/dashboard/assign-riders"
+                    className={getNavLinkClass}
+                    data-tip="Assign Riders"
+                  >
+                    <span>
+                      <FaUserTie />
+                    </span>
+                    <span className="is-drawer-close:hidden">
+                      {" "}
+                      Assign Riders
                     </span>
                   </NavLink>
                 </li>

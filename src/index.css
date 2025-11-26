@@ -8,6 +8,7 @@ themes: light --default ;
   default: true;
   --color-primary: #CAEB66;
   --color-secondary: #03373D;
+  --color-error: #CD5C5C;
 }
 
 body {

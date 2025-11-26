@@ -17,24 +17,27 @@ const ApproveRiders = () => {
   const [statusFilter, setStatusFilter] = useState(""); // "" = all
   const [sortOrder, setSortOrder] = useState("desc"); // default desc
   const [page, setPage] = useState(1);
-  const limit =10
+  const limit = 10;
 
- const { refetch, data: ridersData = {}, isFetching } = useQuery({
-  queryKey: ["riders", statusFilter, sortOrder, page, limit],
-  queryFn: async () => {
-    const res = await axiosSecure.get("/riders", {
-      params: {
-        status: statusFilter || undefined,
-        sortOrder,
-        page,
-        limit,
-      },
-    });
-    return res.data;
-  },
-  keepPreviousData: true, // avoid table flicker when changing page/filter
-});
-
+  const {
+    refetch,
+    data: ridersData = {},
+    isFetching,
+  } = useQuery({
+    queryKey: ["riders", statusFilter, sortOrder, page, limit],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/riders", {
+        params: {
+          status: statusFilter || undefined,
+          sortOrder,
+          page,
+          limit,
+        },
+      });
+      return res.data;
+    },
+    keepPreviousData: true, // avoid table flicker when changing page/filter
+  });
 
   const riders = ridersData.data || [];
   const totalPages = ridersData.totalPages || 1;
@@ -121,7 +124,7 @@ const ApproveRiders = () => {
     setSelectedRider(res.data);
     document.getElementById("view_modal").showModal();
   };
-if (isFetching) {
+  if (isFetching) {
     return <LoadingPage />;
   }
 
@@ -133,36 +136,35 @@ if (isFetching) {
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-6 rounded-lg p-4">
-  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
-    <label className="font-semibold text-gray-700">Status:</label>
-    <select
-      value={statusFilter}
-      onChange={(e) => {
-        setStatusFilter(e.target.value);
-        setPage(1);
-      }}
-      className="w-full sm:w-auto border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#94C6CB] focus:border-[#94C6CB] transition-all"
-    >
-      <option value="">All Status</option>
-      <option value="pending">Pending</option>
-      <option value="approved">Approved</option>
-      <option value="rejected">Rejected</option>
-    </select>
-  </div>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+          <label className="font-semibold text-gray-700">Status:</label>
+          <select
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setPage(1);
+            }}
+            className="w-full sm:w-auto border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#94C6CB] focus:border-[#94C6CB] transition-all"
+          >
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
 
-  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
-    <label className="font-semibold text-gray-700">Sort By:</label>
-    <select
-      value={sortOrder}
-      onChange={(e) => setSortOrder(e.target.value)}
-      className="w-full sm:w-auto border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#94C6CB] focus:border-[#94C6CB] transition-all"
-    >
-      <option value="desc">Newest First</option>
-      <option value="asc">Oldest First</option>
-    </select>
-  </div>
-</div>
-
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+          <label className="font-semibold text-gray-700">Sort By:</label>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="w-full sm:w-auto border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#94C6CB] focus:border-[#94C6CB] transition-all"
+          >
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
+          </select>
+        </div>
+      </div>
 
       {/* Riders Table */}
       <div className="overflow-x-auto">
@@ -173,7 +175,10 @@ if (isFetching) {
               <th className="py-3 px-2 md:px-4 text-left">Name</th>
               <th className="py-3 px-2 md:px-4 text-left">Email</th>
               <th className="py-3 px-2 md:px-4 text-left">Region</th>
-              <th className="py-3 px-2 md:px-4 text-center">Status</th>
+              <th className="py-3 px-2 md:px-4 text-center">
+                Application Status
+              </th>
+              <th className="py-3 px-2 md:px-4 text-center">Work Status</th>
               <th className="py-3 px-2 md:px-4 text-left"> Details</th>
               <th className="py-3 px-2 md:px-4 text-left">Actions</th>
             </tr>
@@ -184,7 +189,9 @@ if (isFetching) {
                 key={rider._id}
                 className="border-t border-gray-200 hover:bg-gray-50 transition-all duration-200"
               >
-                <td className="py-2 px-2 md:px-4">{index + 1 + (page-1)*limit}</td>
+                <td className="py-2 px-2 md:px-4">
+                  {index + 1 + (page - 1) * limit}
+                </td>
                 <td className="py-2 px-2 md:px-4 font-medium">{rider.name}</td>
                 <td className="py-2 px-2 md:px-4">{rider.Email}</td>
                 <td className="py-2 px-2 md:px-4">
@@ -195,6 +202,21 @@ if (isFetching) {
                     {rider.status}
                   </span>
                 </td>
+                <td
+                  className={`py-2 px-2 md:px-4 text-center font-semibold ${
+                    rider.workStatus === "available"
+                      ? "text-green-600"
+                      : rider.workStatus === "in_delivery"
+                      ? "text-yellow-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {rider.workStatus
+                    ?.split("_")
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ") || ""}
+                </td>
+
                 <td className="py-2 px-2 md:px-4">
                   <button
                     onClick={() => handleView(rider._id)}

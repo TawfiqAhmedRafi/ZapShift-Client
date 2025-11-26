@@ -24,6 +24,7 @@ import ApproveRiders from "../Pages/DashBoard/ApproveRiders/ApproveRiders";
 import PricingCalculator from "../Pages/Home/Calculator/PricingCalculator";
 import UsersManagement from "../Pages/DashBoard/UsersManagement/UsersManagement";
 import AdminRoute from "./AdminRoute";
+import AssignRiders from "../Pages/DashBoard/AssignRiders/AssignRiders";
 
 export const router = createBrowserRouter([
   {
@@ -123,6 +124,15 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <UsersManagement></UsersManagement>
+          </AdminRoute>
+        ),
+        
+      },
+      {
+        path: "assign-riders",
+        element: (
+          <AdminRoute>
+           <AssignRiders></AssignRiders>
           </AdminRoute>
         ),
         

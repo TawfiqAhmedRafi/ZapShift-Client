@@ -44,7 +44,7 @@ const PaymentHistory = () => {
               <th className="py-3 px-2 md:px-4 text-left">#</th>
               <th className="py-3 px-2 md:px-4 text-left">Parcel Info</th>
               <th className="py-3 px-2 md:px-4 text-left">Recipient Info</th>
-              <th className="py-3 px-2 md:px-4 text-left">Tracking Number</th>
+              <th className="py-3 px-2 md:px-4 text-left">Transaction ID</th>
               <th className="py-3 px-2 md:px-4 text-left">Payment Info</th>
               <th className="py-3 px-2 md:px-4 text-left">Action</th>
             </tr>
@@ -70,7 +70,7 @@ const PaymentHistory = () => {
                   </div>
                 </td>
                 <td className="py-2 px-2 md:px-4 font-mono text-gray-600">
-                  {payment.trackingId}
+                  {payment.transactionId}
                 </td>
                 <td className="py-2 px-2 md:px-4 text-gray-800">
                   <span className="font-semibold">৳</span> {payment.amount} (

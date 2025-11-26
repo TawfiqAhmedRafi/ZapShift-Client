@@ -83,8 +83,9 @@ const MyParcels = () => {
               <th></th>
               <th>Name</th>
               <th>Cost</th>
-              <th>Delivery Status</th>
               <th>Payment</th>
+              <th>Delivery Status</th>
+              <th>Tracking Id</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -94,7 +95,7 @@ const MyParcels = () => {
                 <th>{(page - 1) * 10 + index + 1}</th>
                 <td>{parcel.parcelName}</td>
                 <td>{parcel.cost}</td>
-                <td>{parcel.deliveryStatus}</td>
+
                 <td>
                   {parcel.paymentStatus === "paid" ? (
                     <div className="badge badge-success flex items-center gap-1">
@@ -121,6 +122,17 @@ const MyParcels = () => {
                     </button>
                   )}
                 </td>
+                <td>
+                  {parcel.deliveryStatus
+                    ? parcel.deliveryStatus
+                        .split("-")
+                        .map(
+                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")
+                    : ""}
+                </td>
+                <td className="font-mono">{parcel.trackingId}</td>
                 <td className="flex flex-col md:flex-row gap-2 md:gap-2">
                   <button className="btn btn-square btn-primary">
                     <FaMagnifyingGlass />
