@@ -136,10 +136,10 @@ const MyParcels = () => {
                 <td
                   className={`py-2 px-2 md:px-4 font-semibold ${
                     parcel.deliveryStatus === "driver-assigned"
-                      ? "text-yellow-600"
+                      ? "text-orange-400"
                       : parcel.deliveryStatus === "pending-pickup"
                       ? "text-red-600"
-                      : "text-green-600"
+                      : parcel.deliveryStatus === 'rider-arriving' ? "text-yellow-500" : parcel.deliveryStatus === 'parcel-picked-up'? "text-lime-400" :"text-green-600"
                   }`}
                 >
                   {parcel.deliveryStatus
