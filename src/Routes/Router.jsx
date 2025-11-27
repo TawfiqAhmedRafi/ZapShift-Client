@@ -25,6 +25,8 @@ import PricingCalculator from "../Pages/Home/Calculator/PricingCalculator";
 import UsersManagement from "../Pages/DashBoard/UsersManagement/UsersManagement";
 import AdminRoute from "./AdminRoute";
 import AssignRiders from "../Pages/DashBoard/AssignRiders/AssignRiders";
+import AssignedDeliveries from "../Pages/DashBoard/AssignedDeliveries/AssignedDeliveries";
+import RiderRoute from "./RiderRoute";
 
 export const router = createBrowserRouter([
   {
@@ -119,6 +121,16 @@ export const router = createBrowserRouter([
         path: "payment-cancelled",
         Component: PaymentCancelled,
       },
+      // rider only routes
+      {
+        path: "assigned-deliveries",
+        element: (
+          <RiderRoute>
+            <AssignedDeliveries></AssignedDeliveries>
+          </RiderRoute>
+        ),
+      },
+      // admin only  routes
       {
         path: "users-management",
         element: (
@@ -126,20 +138,14 @@ export const router = createBrowserRouter([
             <UsersManagement></UsersManagement>
           </AdminRoute>
         ),
-        
       },
       {
         path: "assign-riders",
         element: (
           <AdminRoute>
-           <AssignRiders></AssignRiders>
+            <AssignRiders></AssignRiders>
           </AdminRoute>
         ),
-        
-      },
-      {
-        path: "payment-history",
-        Component: PaymentHistory,
       },
       {
         path: "approve-riders",
@@ -148,6 +154,10 @@ export const router = createBrowserRouter([
             <ApproveRiders></ApproveRiders>
           </AdminRoute>
         ),
+      },
+      {
+        path: "payment-history",
+        Component: PaymentHistory,
       },
     ],
   },

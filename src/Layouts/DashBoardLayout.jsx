@@ -7,6 +7,7 @@ import {
   FaBox,
   FaMotorcycle,
   FaRegCreditCard,
+  FaTasks,
   FaUsers,
   FaUserTie,
 } from "react-icons/fa";
@@ -176,6 +177,27 @@ const DashBoardLayout = () => {
               </NavLink>
             </li>
 
+            {role === "rider" && (
+              <>
+                <li>
+                  <NavLink
+                    to="/dashboard/assigned-deliveries"
+                    className={getNavLinkClass}
+                    data-tip="Assigned Deliveries"
+                  >
+                    <span>
+                      <FaTasks></FaTasks>
+                    </span>
+                    <span className="is-drawer-close:hidden">
+                      {" "}
+                      Assigned Deliveries
+                    </span>
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {/* admin only links */}
             {role === "admin" && (
               <>
                 <li>
