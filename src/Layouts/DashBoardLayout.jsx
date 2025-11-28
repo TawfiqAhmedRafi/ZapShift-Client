@@ -11,6 +11,7 @@ import {
   FaUsers,
   FaUserTie,
 } from "react-icons/fa";
+import {SiGoogletasks} from "react-icons/si"
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
 import useRole from "../hooks/useRole";
@@ -176,7 +177,7 @@ const DashBoardLayout = () => {
                 <span className="is-drawer-close:hidden"> Payment History</span>
               </NavLink>
             </li>
-
+                  {/* rider only links */}
             {role === "rider" && (
               <>
                 <li>
@@ -191,6 +192,21 @@ const DashBoardLayout = () => {
                     <span className="is-drawer-close:hidden">
                       {" "}
                       Assigned Deliveries
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/dashboard/completed-deliveries"
+                    className={getNavLinkClass}
+                    data-tip="Completed Deliveries"
+                  >
+                    <span>
+                      <SiGoogletasks></SiGoogletasks>
+                    </span>
+                    <span className="is-drawer-close:hidden">
+                      {" "}
+                      Completed Deliveries
                     </span>
                   </NavLink>
                 </li>

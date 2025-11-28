@@ -4,6 +4,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { FaTrashCan } from "react-icons/fa6";
+import LoadingPage from "../../LoadingPage";
 
 const AssignedDeliveries = () => {
   const { user } = useAuth();
@@ -52,7 +53,7 @@ const AssignedDeliveries = () => {
 
   if (isFetching) {
     return (
-      <p className="text-center py-6 text-gray-500">Loading assigned parcels...</p>
+     <LoadingPage></LoadingPage>
     );
   }
 
