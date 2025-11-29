@@ -11,10 +11,10 @@ const AssignRiders = () => {
   const axiosSecure = useAxiosSecure();
 
   const { data: parcels = [], refetch: parcelsRefetch } = useQuery({
-    queryKey: ["parcels", "pending-pickup"],
+    queryKey: ["parcels", "parcel-paid"],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        "/parcels?deliveryStatus=pending-pickup"
+        "/parcels?deliveryStatus=parcel-paid"
       );
       return res.data.data;
     },
@@ -46,6 +46,7 @@ const AssignRiders = () => {
       riderName: rider.name,
       riderPhone: rider.phoneNumber,
       parcelId: selectedParcel._id,
+      trackingId : selectedParcel.trackingId
     };
     axiosSecure
       .patch(`/parcels/${selectedParcel._id}`, riderAssignInfo)

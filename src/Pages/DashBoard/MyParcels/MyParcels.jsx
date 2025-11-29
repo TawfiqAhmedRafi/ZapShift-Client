@@ -57,6 +57,7 @@ const MyParcels = () => {
       parcelId: parcel._id,
       senderEmail: parcel.senderEmail,
       parcelName: parcel.parcelName,
+      trackingId : parcel.trackingId
     };
     const res = await axiosSecure.post(
       "/payment-checkout-session",
@@ -75,9 +76,7 @@ const MyParcels = () => {
 
   return (
     <div className="p-4 md:p-8">
-      <h2 className="text-4xl font-bold text-secondary mb-6">
-        All my Parcels
-      </h2>
+      <h2 className="text-4xl font-bold text-secondary mb-6">All my Parcels</h2>
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
@@ -137,24 +136,32 @@ const MyParcels = () => {
                   className={`py-2 px-2 md:px-4 font-semibold ${
                     parcel.deliveryStatus === "driver-assigned"
                       ? "text-orange-400"
-                      : parcel.deliveryStatus === "pending-pickup"
+                      : parcel.deliveryStatus === "parcel-paid"
                       ? "text-red-600"
-                      : parcel.deliveryStatus === 'rider-arriving' ? "text-yellow-500" : parcel.deliveryStatus === 'parcel-picked-up'? "text-lime-400" :"text-green-600"
+                      : parcel.deliveryStatus === "rider-arriving"
+                      ? "text-yellow-500"
+                      : parcel.deliveryStatus === "parcel-picked-up"
+                      ? "text-lime-400"
+                      : "text-green-600"
                   }`}
                 >
                   {parcel.deliveryStatus
                     ? parcel.deliveryStatus
                         .split("-")
                         .map(
-                          (word) =>
-                            word.charAt(0).toUpperCase() + word.slice(1)
+                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
                         )
                         .join(" ")
                     : ""}
                 </td>
 
                 <td className="py-2 px-2 md:px-4 font-mono">
-                  {parcel.trackingId}
+                  <Link
+                    to={`/parcel-track/${parcel.trackingId}`}
+                    className="inline-block transform hover:translate-x-1 transition-transform duration-200"
+                  >
+                    {parcel.trackingId}
+                  </Link>
                 </td>
 
                 <td className="py-2 px-2 md:px-4 flex flex-col md:flex-row gap-2 md:gap-2">

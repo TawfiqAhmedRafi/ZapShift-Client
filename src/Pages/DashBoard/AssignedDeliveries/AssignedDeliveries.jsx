@@ -10,7 +10,11 @@ const AssignedDeliveries = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  const { data: parcels = [], refetch, isFetching } = useQuery({
+  const {
+    data: parcels = [],
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ["parcels", user.email, "driver-assigned"],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -28,12 +32,18 @@ const AssignedDeliveries = () => {
       status === "parcel-picked-up"
     ) {
       workStatus = "in_delivery";
-    } else if (status === "parcel-delivered" || status === "pending-pickup") {
+    } else if (status === "parcel-delivered" || status === "parcel-paid") {
       workStatus = "available";
     }
 
-    const statusInfo = { deliveryStatus: status, workStatus };
-    const message = `Parcel Status is updated to ${status.split("-").join(" ")}`;
+    const statusInfo = {
+      deliveryStatus: status,
+      workStatus,
+      trackingId: parcel.trackingId,
+    };
+    const message = `Parcel Status is updated to ${status
+      .split("-")
+      .join(" ")}`;
 
     axiosSecure
       .patch(`/parcels/${parcel._id}/status`, statusInfo)
@@ -52,9 +62,7 @@ const AssignedDeliveries = () => {
   };
 
   if (isFetching) {
-    return (
-     <LoadingPage></LoadingPage>
-    );
+    return <LoadingPage></LoadingPage>;
   }
 
   return (
@@ -63,7 +71,8 @@ const AssignedDeliveries = () => {
         Assigned Deliveries
       </h1>
       <p className="mb-6 text-gray-600 font-medium">
-        Total Parcels Pending Pickup: <span className="font-bold">{parcels.length}</span>
+        Total Parcels Pending Pickup:{" "}
+        <span className="font-bold">{parcels.length}</span>
       </p>
 
       <div className="overflow-x-auto">
@@ -85,7 +94,9 @@ const AssignedDeliveries = () => {
                 className="border-t border-gray-200 hover:bg-gray-50 transition-all duration-200"
               >
                 <td className="py-2 px-2 md:px-4">{index + 1}</td>
-                <td className="py-2 px-2 md:px-4 font-medium">{parcel.parcelName}</td>
+                <td className="py-2 px-2 md:px-4 font-medium">
+                  {parcel.parcelName}
+                </td>
                 <td className="py-2 px-2 md:px-4">
                   {parcel.senderAddress}, {parcel.senderDistrict}
                 </td>
@@ -103,17 +114,21 @@ const AssignedDeliveries = () => {
                       </button>
                       <button
                         onClick={() =>
-                          handleDeliveryStatusUpdate(parcel, "pending-pickup")
+                          handleDeliveryStatusUpdate(parcel, "parcel-paid")
                         }
                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition-all duration-200"
                       >
                         Reject
                       </button>
                     </div>
-                  ) : parcel.deliveryStatus === "pending-pickup" ? (
-                    <span className="text-red-700 font-semibold">Delivery Rejected</span>
+                  ) : parcel.deliveryStatus === "parcel-paid" ? (
+                    <span className="text-red-700 font-semibold">
+                      Delivery Rejected
+                    </span>
                   ) : (
-                    <span className="text-green-600 font-semibold">Delivery Accepted</span>
+                    <span className="text-green-600 font-semibold">
+                      Delivery Accepted
+                    </span>
                   )}
                 </td>
 
@@ -133,7 +148,9 @@ const AssignedDeliveries = () => {
                     </span>
                   ) : parcel.deliveryStatus === "parcel-picked-up" ? (
                     <div className="flex gap-2 justify-center items-center">
-                      <span className="text-blue-600 font-medium">Parcel Picked Up</span>
+                      <span className="text-blue-600 font-medium">
+                        Parcel Picked Up
+                      </span>
                       <button
                         onClick={() =>
                           handleDeliveryStatusUpdate(parcel, "parcel-delivered")
@@ -144,15 +161,14 @@ const AssignedDeliveries = () => {
                       </button>
                     </div>
                   ) : parcel.deliveryStatus === "parcel-delivered" ? (
-                    <span className="text-green-600 font-medium">Parcel Delivered</span>
+                    <span className="text-green-600 font-medium">
+                      Parcel Delivered
+                    </span>
                   ) : null}
                 </td>
 
                 <td className="py-2 px-2 md:px-4 text-center">
-                  <button
-                    
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition-all duration-200 flex items-center justify-center"
-                  >
+                  <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition-all duration-200 flex items-center justify-center">
                     <FaTrashCan />
                   </button>
                 </td>
@@ -162,7 +178,9 @@ const AssignedDeliveries = () => {
         </table>
 
         {parcels.length === 0 && (
-          <p className="text-center py-6 text-gray-500">No assigned parcels available.</p>
+          <p className="text-center py-6 text-gray-500">
+            No assigned parcels available.
+          </p>
         )}
       </div>
     </div>
