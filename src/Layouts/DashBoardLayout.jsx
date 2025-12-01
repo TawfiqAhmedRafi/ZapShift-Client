@@ -11,10 +11,11 @@ import {
   FaUsers,
   FaUserTie,
 } from "react-icons/fa";
-import {SiGoogletasks} from "react-icons/si"
+import { SiGoogletasks } from "react-icons/si";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
 import useRole from "../hooks/useRole";
+import LogoImg from "../assets/logo.png";
 
 const DashBoardLayout = () => {
   const { role } = useRole();
@@ -126,15 +127,31 @@ const DashBoardLayout = () => {
 
         <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
           {/* Logo in sidebar */}
-          <div className="p-4 w-full flex justify-center is-drawer-close:hidden">
-            <Logo />
-          </div>
 
           {/* Menu items */}
           <ul className="menu w-full grow">
-            {/* Homepage */}
             <li>
-              <NavLink to="/" className={getNavLinkClass} data-tip="Homepage">
+              <NavLink
+                to="/"
+                className={getNavLinkClass}
+                data-tip="Home Page"
+              >
+                {/* IMG: show when drawer closed, hide when drawer open */}
+                <span className="is-drawer-open:hidden is-drawer-close:inline-block">
+                  <img src={LogoImg} alt="" />
+                </span>
+
+                {/* LOGO: show when drawer open, hide when drawer closed */}
+                <span className="is-drawer-open:inline-block is-drawer-close:hidden">
+                  <Logo />
+                </span>
+              </NavLink>
+            </li>
+
+            {/* Homepage */}
+
+            <li>
+              <NavLink to="/dashboard" end className={getNavLinkClass} data-tip="Homepage">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -177,7 +194,7 @@ const DashBoardLayout = () => {
                 <span className="is-drawer-close:hidden"> Payment History</span>
               </NavLink>
             </li>
-                  {/* rider only links */}
+            {/* rider only links */}
             {role === "rider" && (
               <>
                 <li>

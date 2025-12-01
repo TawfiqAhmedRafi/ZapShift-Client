@@ -50,8 +50,8 @@ const Navbar = () => {
 
       {user && (
         <li className="mr-2">
-          <NavLink className={getLinkClass} to="/dashboard/my-parcels">
-            My Parcels
+          <NavLink className={getLinkClass} to="/dashboard">
+            Dashboard
           </NavLink>
         </li>
       )}
