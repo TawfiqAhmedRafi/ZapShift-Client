@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQueryClient } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
 const WorkStatusToggle = ({ currentStatus, inDelivery, email }) => {
   const [status, setStatus] = useState(currentStatus);
@@ -14,22 +15,47 @@ const WorkStatusToggle = ({ currentStatus, inDelivery, email }) => {
   }, [currentStatus]);
 
   const handleToggle = async () => {
-    if (inDelivery) return;
-    setLoading(true);
+  if (inDelivery) return;
 
-    const newWorkStatus = status === "available" ? "unavailable" : "available";
+  // Show confirmation dialog
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: `Do you want to mark yourself as ${status === "available" ? "unavailable" : "available"}?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, change it!",
+    cancelButtonText: "No, cancel",
+  });
 
-    try {
-      await axiosSecure.patch("/riders/work-status", { email, newWorkStatus });
-      setStatus(newWorkStatus);
-      queryClient.invalidateQueries(["rider-dashboard-stats"]);
-    } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.message || "Failed to update work status");
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (!result.isConfirmed) return; 
+
+  setLoading(true);
+
+  const newWorkStatus = status === "available" ? "unavailable" : "available";
+
+  try {
+    await axiosSecure.patch("/riders/work-status", { email, newWorkStatus });
+    setStatus(newWorkStatus);
+    queryClient.invalidateQueries(["rider-dashboard-stats"]);
+
+    Swal.fire({
+      icon: "success",
+      title: "Status updated!",
+      text: `Your status is now ${newWorkStatus}.`,
+      timer: 1500,
+      showConfirmButton: false,
+    });
+  } catch (err) {
+    console.error(err);
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: err.response?.data?.message || "Failed to update work status",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex items-center space-x-4">
