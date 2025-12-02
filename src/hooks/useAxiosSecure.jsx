@@ -1,36 +1,34 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useAuth from "./useAuth";
 import { useNavigate } from "react-router";
 
 const axiosSecure = axios.create({
   baseURL: "https://zap-shift-server-snowy-zeta.vercel.app",
-  //baseURL: "http://localhost:3000",
 });
+
 const useAxiosSecure = () => {
   const { user, logOut } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // intercept request
+    // REQUEST INTERCEPTOR
     const requestInterceptor = axiosSecure.interceptors.request.use(
       (config) => {
-        config.headers.Authorization = `Bearer ${user?.accessToken}`;
+        if (user?.accessToken) {
+          config.headers.Authorization = `Bearer ${user.accessToken}`;
+        }
         return config;
       }
     );
-    // interceptor response
-    const resInterceptors = axiosSecure.interceptors.response.use(
-      (response) => {
-        return response;
-      },
+
+    // RESPONSE INTERCEPTOR
+    const responseInterceptor = axiosSecure.interceptors.response.use(
+      (response) => response,
       (error) => {
-        console.log(error);
-        const statusCode = error.status;
+        const statusCode = error.response?.status;
         if (statusCode === 401 || statusCode === 403) {
-          logOut().then(() => {
-            navigate("/login");
-          });
+          logOut().then(() => navigate("/login"));
         }
         return Promise.reject(error);
       }
@@ -38,9 +36,9 @@ const useAxiosSecure = () => {
 
     return () => {
       axiosSecure.interceptors.request.eject(requestInterceptor);
-      axiosSecure.interceptors.response.eject(resInterceptors);
+      axiosSecure.interceptors.response.eject(responseInterceptor);
     };
-  }, [user,logOut,navigate]);
+  }, [user, logOut, navigate]);
 
   return axiosSecure;
 };
