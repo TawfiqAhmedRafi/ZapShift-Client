@@ -73,7 +73,7 @@ const PaymentHistory = () => {
                   {payment.transactionId}
                 </td>
                 <td className="py-2 px-2 md:px-4 text-gray-800">
-                  <span className="font-semibold">৳</span> {payment.amount} (
+                  <span className="font-semibold">$</span> {payment.amount} (
                   <span className="capitalize">
                     {payment.paymentStatus} at{" "}
                     {format(new Date(payment.paidAt), "PPpp")}

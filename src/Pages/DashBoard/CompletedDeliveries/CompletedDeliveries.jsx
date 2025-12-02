@@ -59,9 +59,9 @@ const CompletedDeliveries = () => {
                 <td className="py-3 px-4 font-mono">{parcel.trackingId}</td>
                 <td className="py-3 px-4">{parcel.senderAddress}, {parcel.senderDistrict}</td>
                 <td className="py-3 px-4">{parcel.receiverAddress}, {parcel.receiverDistrict}</td>
-                <td className="py-3 px-4">৳{parcel.cost}</td>
+                <td className="py-3 px-4">${parcel.cost}</td>
                 <td className="py-3 px-4 font-semibold text-green-600">
-                  ৳{calculatePayout(parcel)}
+                  ${calculatePayout(parcel)}
                 </td>
                 <td className="py-3 px-4">
                   <button className="bg-secondary text-white px-4 py-2 rounded-md shadow hover:bg-secondary/90 transition-all duration-200">
