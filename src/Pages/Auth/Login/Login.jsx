@@ -7,32 +7,43 @@ import SocialLogin from "../SocialLogin/SocialLogin";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
   const { SignInUser } = useAuth();
   const location = useLocation();
-  
- const { register, handleSubmit, control } = useForm();
 
-const watchEmail = useWatch({
-  control,
-  name: "email",
-  defaultValue: ""
-});
+  const { register, handleSubmit, control } = useForm();
 
-  const handleLogin = (data) => {
-    SignInUser(data.email, data.password)
-      .then((result) =>  {
-        console.log(result.user);
-        navigate(location?.state || "/")
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const watchEmail = useWatch({
+    control,
+    name: "email",
+    defaultValue: "",
+  });
+
+  const handleLogin = async (data) => {
+    setLoginError("");
+    try {
+      const result = await SignInUser(data.email, data.password);
+      console.log(result.user);
+      navigate(location?.state || "/");
+    } catch (error) {
+      console.log(error);
+
+      if (error.code === "auth/user-not-found") {
+        setLoginError("No user found with this email.");
+      } else if (error.code === "auth/wrong-password") {
+        setLoginError("Incorrect password.");
+      } else if (error.code === "auth/invalid-email") {
+        setLoginError("Invalid email address.");
+      } else {
+        setLoginError(error.message);
+      }
+    }
   };
- 
+
   return (
     <div className=" ">
-        <h2  className="text-4xl font-bold text-secondary">Welcome Back</h2>
+      <h2 className="text-4xl font-bold text-secondary">Welcome Back</h2>
       <p className="text-sm">Login with ZapShift</p>
       <form onSubmit={handleSubmit(handleLogin)}>
         <fieldset className="fieldset">
@@ -51,8 +62,8 @@ const watchEmail = useWatch({
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-              {...register("password",{
-                required : true
+              {...register("password", {
+                required: true,
               })}
               className="input"
               placeholder="Password"
@@ -65,14 +76,26 @@ const watchEmail = useWatch({
               {showPassword ? <FaEye></FaEye> : <FaEyeSlash></FaEyeSlash>}
             </button>
           </div>
-
+          {loginError && (
+            <p className="text-red-500 text-sm mt-1">{loginError}</p>
+          )}
           <div>
-            <Link state={{ email: watchEmail }} to="/forgot-password" className="link link-hover hover:font-bold text-secondary">Forgot password?</Link>
+            <Link
+              state={{ email: watchEmail }}
+              to="/forgot-password"
+              className="link link-hover hover:font-bold text-secondary"
+            >
+              Forgot password?
+            </Link>
           </div>
           <button className="btn btn-primary mt-4">Login</button>
           <p>
             New to ZapShift?
-            <Link state={location.state} to="/register" className="text-primary hover:underline">
+            <Link
+              state={location.state}
+              to="/register"
+              className="text-primary hover:underline"
+            >
               Register
             </Link>{" "}
           </p>
