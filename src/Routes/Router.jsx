@@ -30,6 +30,7 @@ import RiderRoute from "./RiderRoute";
 import CompletedDeliveries from "../Pages/DashBoard/CompletedDeliveries/CompletedDeliveries";
 import ParcelTrack from "../Pages/ParcelTrack/ParcelTrack";
 import DashboardHome from "../Pages/DashBoard/DashboardHome/DashboardHome";
+import ParcelDetails from "../Pages/DashBoard/MyParcels/ParcelDetails/ParcelDetails";
 
 export const router = createBrowserRouter([
   {
@@ -120,6 +121,10 @@ export const router = createBrowserRouter([
       {
         path: "my-parcels",
         Component: MyParcels,
+      },
+      {
+        path: "parcelDetails/:id",
+        Component: ParcelDetails,
       },
       {
         path: "payment/:parcelId",

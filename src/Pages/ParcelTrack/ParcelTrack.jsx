@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useAxios from "../../hooks/useAxios";
 
 const ParcelTrack = () => {
   const { trackingId } = useParams();
   const axiosInstance = useAxios();
+  const navigate = useNavigate();
   const {
     data: trackings = [],
     isLoading,
@@ -101,6 +102,17 @@ const ParcelTrack = () => {
           </p>
         )}
       </div>
+       <div className="mt-4 flex  justify-end">
+             <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 text-white font-semibold rounded-lg shadow-md transition-all duration-300 active:scale-95 hover:brightness-110"
+          style={{
+            background: "linear-gradient(90deg, #CAEB66 0%, #03373D 100%)",
+          }}
+        >
+          ← Back
+        </button>
+        </div>
     </div>
   );
 };

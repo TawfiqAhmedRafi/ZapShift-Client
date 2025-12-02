@@ -5,7 +5,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaMagnifyingGlass, FaTrashCan } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import Swal from "sweetalert2";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const MyParcels = () => {
   const { user } = useAuth();
@@ -50,6 +50,11 @@ const MyParcels = () => {
       }
     });
   };
+  const navigate = useNavigate()
+
+ const  handleViewParcel = async (parcelId)=>{
+  navigate(`../parcelDetails/${parcelId}`);
+ }
 
   const handlePayment = async (parcel) => {
     const paymentInfo = {
@@ -165,10 +170,8 @@ const MyParcels = () => {
                 </td>
 
                 <td className="py-2 px-2 md:px-4 flex flex-col md:flex-row gap-2 md:gap-2">
-                  <button className="btn btn-square btn-primary hover:scale-105 hover:shadow-md transition-transform duration-200">
-                    <FaMagnifyingGlass />
-                  </button>
-                  <button className="btn btn-square bg-[#94C6CB] hover:bg-[#7bb0b7] text-white transition-all duration-200">
+                 
+                  <button onClick={()=>handleViewParcel(parcel._id)} className="btn btn-square bg-[#94C6CB] hover:bg-[#7bb0b7] text-white transition-all duration-200">
                     <FiEdit />
                   </button>
                   <button

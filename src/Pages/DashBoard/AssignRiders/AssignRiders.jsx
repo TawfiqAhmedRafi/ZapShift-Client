@@ -32,7 +32,7 @@ const AssignRiders = () => {
     },
   });
 
-  console.log(selectedParcel);
+ // console.log(selectedParcel);
 
   const openAssignRiderModal = (parcel) => {
     setSelectedParcel(parcel);
@@ -51,7 +51,7 @@ const AssignRiders = () => {
     axiosSecure
       .patch(`/parcels/${selectedParcel._id}`, riderAssignInfo)
       .then((res) => {
-        console.log(res.data);
+       // console.log(res.data);
         if (res.data.modifiedCount) {
           parcelsRefetch();
           riderRefetch();
